@@ -1,7 +1,8 @@
 #include <stdio.h>
 
 int main() {
-    printf("oi");
+    
+    printf("nome alterado");
 
     return 0;
 }
