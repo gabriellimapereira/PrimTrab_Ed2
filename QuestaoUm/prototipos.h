@@ -1,6 +1,8 @@
 #ifndef PROTOTIPOS
 #define PROTOTIPOS
 
+// definições das estruturas das informações e das árvores
+
 typedef struct InfoMusica {
     char titulo[50];
     int duracao;
@@ -35,5 +37,8 @@ typedef struct ArvArtista {
     InfoArtista info;
     struct ArvArtista *esq, *dir;
 } ArvArtista;
+
+// declarações das funções de música
+InfoMusica lerInfoMusica();
 
 #endif
