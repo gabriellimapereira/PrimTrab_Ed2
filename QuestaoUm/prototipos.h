@@ -40,5 +40,17 @@ typedef struct ArvArtista {
 
 // declarações das funções de música
 InfoMusica lerInfoMusica();
+ArvMusica* inicializarArvMus();
+ArvMusica* alocarNoMusica(InfoMusica info);
+int insereArvMus(ArvMusica **raiz, ArvMusica *novoNo);
+void imprimeArvMusc(ArvMusica *raiz);
+void liberaArvMus(ArvMusica *raiz);
+
+// declarações das funções de álbum
+InfoAlbum lerInfoAlbum();
+
+// declarações das funções de artista
+InfoArtista lerInfoArtista();
+
 
 #endif
