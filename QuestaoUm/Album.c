@@ -3,22 +3,23 @@
 #include "stdlib.h"
 #include "prototipos.h"
 
-
-InfoMusica leriInfoAlbum() {
-    InfoMusica info;
+InfoAlbum lerInfoAlbum() {
+    InfoAlbum info;
 
     printf("Digite o dado: ");
     scanf("%d", &info.dado);
 
+    info.musica = NULL;
+
     return info;
 }
 
-ArvMusica* inicializarArvMus() {
+ArvAlbum* inicializarArvAlbum() {
     return NULL;
 }
 
-ArvMusica* alocarNoMusica(InfoMusica info) {
-    ArvMusica *novoNo = (ArvMusica*) malloc(sizeof(ArvMusica));
+ArvAlbum* alocarNoAlbum(InfoAlbum info) {
+    ArvAlbum *novoNo = (ArvAlbum*) malloc(sizeof(ArvAlbum));
 
     if (novoNo != NULL) {
         (*novoNo).info = info;
@@ -29,15 +30,15 @@ ArvMusica* alocarNoMusica(InfoMusica info) {
     return novoNo;
 }
 
-int insereArvMus(ArvMusica **raiz, ArvMusica *novoNo) {
+int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
     int inseriu = 0;
 
     if (*raiz == NULL) {
         *raiz = novoNo;
     } else if ((**raiz).info.dado <  (*novoNo).info.dado) {
-        inseriu = insereArvMus(&((**raiz).dir), novoNo);
+        inseriu = insereArvAlbum(&((**raiz).dir), novoNo);
     } else if ((**raiz).info.dado > (*novoNo).info.dado) {
-        inseriu = insereArvMus(&((**raiz).esq), novoNo);
+        inseriu = insereArvAlbum(&((**raiz).esq), novoNo);
     } else {
         inseriu = 1;
     }
@@ -45,15 +46,15 @@ int insereArvMus(ArvMusica **raiz, ArvMusica *novoNo) {
     return inseriu;
 }
 
-void imprimeArvMus(ArvMusica *raiz) {
+void imprimeArvAlbum(ArvAlbum *raiz) {
     if (raiz != NULL) {
-        imprimeArvMus((*raiz).esq);
-        printf("dado: %d\n", (*raiz).info.dado);
-        imprimeArvMus((*raiz).dir);
+        imprimeArvAlbum((*raiz).esq);
+        printf("Dado: %d\n", (*raiz).info.dado);
+        imprimeArvAlbum((*raiz).dir);
     }
 }
 
-void liberaArvMus(ArvMusica *raiz) {
+void liberaArvAlbum(ArvAlbum *raiz) {
     if (raiz != NULL) {
         liberaArvMus((*raiz).esq);
         liberaArvMus((*raiz).dir);
@@ -61,8 +62,8 @@ void liberaArvMus(ArvMusica *raiz) {
     }
 }
 
-ArvMusica* soUmFilhoMus(ArvMusica *raiz) {
-    ArvMusica *filho;
+ArvAlbum* soUmFilhoAlbum(ArvAlbum *raiz) {
+    ArvAlbum *filho;
 
     if ((*raiz).dir == NULL) {
         filho = (*raiz).esq;
@@ -75,34 +76,34 @@ ArvMusica* soUmFilhoMus(ArvMusica *raiz) {
     return filho;
 }
 
-int removerMus(ArvMusica **raiz, int valor) {
+int removerAlbum(ArvAlbum **raiz, int valor) {
     int removeu = 1;
 
     if (*raiz != NULL) {
         if ((**raiz).info.dado == valor) {
-            ArvMusica *aux, *filho;
+            ArvAlbum *aux, *filho;
             if ((**raiz).dir == NULL && (**raiz).esq == NULL) {
                 aux = *raiz;
                 *raiz = NULL;
                 free(aux);
             } else {
-                if ((filho = soUmFilhoMus(*raiz)) != NULL) {
+                if ((filho = soUmFilhoAlbum(*raiz)) != NULL) {
                     aux = *raiz;
                     *raiz = filho;
                     free(aux);
                 } else {
-                    ArvMusica *maiorEsq = (**raiz).esq;
+                    ArvAlbum *maiorEsq = (**raiz).esq;
                     while ((*maiorEsq).dir != NULL) maiorEsq = (*maiorEsq).dir;
 
                     ((**raiz)).info.dado = (*maiorEsq).info.dado;
-                    removeu = removerMus(&((**raiz).esq), (*maiorEsq).info.dado);
+                    removeu = removerAlbum(&((**raiz).esq), (*maiorEsq).info.dado);
                 }
             } 
         } else {
             if ((**raiz).info.dado > valor) {
-                removeu = removerMus(&((**raiz).esq), valor);
+                removeu = removerAlbum(&((**raiz).esq), valor);
             } else {
-                removeu = removerMus(&((**raiz).dir), valor);
+                removeu = removerAlbum(&((**raiz).dir), valor);
             }
         }
     } else {

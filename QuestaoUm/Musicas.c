@@ -47,7 +47,7 @@ int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo) {
 void imprimeArvMus(ArvMusica *raiz) {
     if (raiz != NULL) {
         imprimeArvMus((*raiz).esq);
-        printf("dado: %d\n", (*raiz).info.dado);
+        printf("Dado: %d\n", (*raiz).info.dado);
         imprimeArvMus((*raiz).dir);
     }
 }

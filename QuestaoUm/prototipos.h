@@ -46,7 +46,7 @@ int removerMus(ArvMusica **raiz, int valor);
 InfoAlbum lerInfoAlbum();
 ArvAlbum* inicializarArvAlbum();
 ArvAlbum* alocarNoAlbum(InfoAlbum info);
-int insereNolbum(ArvAlbum **raiz, ArvAlbum *novoNo);
+int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo);
 void imprimeArvAlbum(ArvAlbum *raiz);
 void liberaArvAlbum(ArvAlbum *raiz);
 ArvMusica* soUmFilhoAlbum(ArvAlbum *raiz);
