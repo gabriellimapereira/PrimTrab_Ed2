@@ -28,15 +28,15 @@ ArvMusica* alocarNoMusica(InfoMusica info) {
     return novoNo;
 }
 
-int insereArvMus(ArvMusica **raiz, ArvMusica *novoNo) {
+int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo) {
     int inseriu = 0;
 
     if (*raiz == NULL) {
         *raiz = novoNo;
     } else if ((**raiz).info.dado <  (*novoNo).info.dado) {
-        inseriu = insereArvMus(&((**raiz).dir), novoNo);
+        inseriu = insereNoMus(&((**raiz).dir), novoNo);
     } else if ((**raiz).info.dado > (*novoNo).info.dado) {
-        inseriu = insereArvMus(&((**raiz).esq), novoNo);
+        inseriu = insereNoMus(&((**raiz).esq), novoNo);
     } else {
         inseriu = 1;
     }

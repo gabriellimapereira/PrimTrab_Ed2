@@ -36,7 +36,7 @@ typedef struct ArvArtista {
 InfoMusica lerInfoMusica();
 ArvMusica* inicializarArvMus();
 ArvMusica* alocarNoMusica(InfoMusica info);
-int insereArvMus(ArvMusica **raiz, ArvMusica *novoNo);
+int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo);
 void imprimeArvMus(ArvMusica *raiz);
 void liberaArvMus(ArvMusica *raiz);
 ArvMusica* soUmFilhoMus(ArvMusica *raiz);
@@ -44,9 +44,22 @@ int removerMus(ArvMusica **raiz, int valor);
 
 // declarações das funções de álbum
 InfoAlbum lerInfoAlbum();
+ArvAlbum* inicializarArvAlbum();
+ArvAlbum* alocarNoAlbum(InfoAlbum info);
+int insereNolbum(ArvAlbum **raiz, ArvAlbum *novoNo);
+void imprimeArvAlbum(ArvAlbum *raiz);
+void liberaArvAlbum(ArvAlbum *raiz);
+ArvMusica* soUmFilhoAlbum(ArvAlbum *raiz);
+int removerAlbum(ArvAlbum **raiz, int valor);
 
 // declarações das funções de artista
-InfoArtista lerInfoArtista();
-
+InfoArtista lerInfoArt();
+ArvArtista* inicializarArvArt();
+ArvArtista* alocarNoArt(InfoArtista info);
+int insereNoArt(ArvArtista **raiz, ArvArtista *novoNo);
+void imprimeArvArt(ArvArtista *raiz);
+void liberaArvArt(ArvArtista *raiz);
+ArvArtista* soUmFilhoArt(ArvArtista *raiz);
+int removerArt(ArvArtista **raiz, int valor);
 
 #endif

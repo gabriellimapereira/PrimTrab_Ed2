@@ -12,7 +12,7 @@ int main() {
         InfoMusica dado = lerInfoMusica();
         ArvMusica *novoNo = alocarNoMusica(dado);
         if (novoNo)
-            insereArvMus(&raiz, novoNo);
+            insereNoMus(&raiz, novoNo);
     }
 
     printf("\n--- ÁRVORE APÓS INSERÇÕES ---\n");
