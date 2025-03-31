@@ -29,7 +29,7 @@ ArvMusica* alocarNoMusica(InfoMusica info) {
 }
 
 int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo) {
-    int inseriu = 0;
+    int inseriu = 1;
 
     if (*raiz == NULL) {
         *raiz = novoNo;
@@ -38,7 +38,7 @@ int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo) {
     } else if ((**raiz).info.dado > (*novoNo).info.dado) {
         inseriu = insereNoMus(&((**raiz).esq), novoNo);
     } else {
-        inseriu = 1;
+        inseriu = 0;
     }
 
     return inseriu;

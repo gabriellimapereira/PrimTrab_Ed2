@@ -31,7 +31,7 @@ ArvAlbum* alocarNoAlbum(InfoAlbum info) {
 }
 
 int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
-    int inseriu = 0;
+    int inseriu = 1;
 
     if (*raiz == NULL) {
         *raiz = novoNo;
@@ -40,7 +40,7 @@ int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
     } else if ((**raiz).info.dado > (*novoNo).info.dado) {
         inseriu = insereArvAlbum(&((**raiz).esq), novoNo);
     } else {
-        inseriu = 1;
+        inseriu = 0;
     }
 
     return inseriu;

@@ -31,7 +31,7 @@ ArvArtista* alocarNoArt(InfoArtista info) {
 }
 
 int insereNoArt(ArvArtista **raiz, ArvArtista *novoNo) {
-    int inseriu = 0;
+    int inseriu = 1;
 
     if (*raiz == NULL) {
         *raiz = novoNo;
@@ -40,7 +40,7 @@ int insereNoArt(ArvArtista **raiz, ArvArtista *novoNo) {
     } else if ((**raiz).info.dado > (*novoNo).info.dado) {
         inseriu = insereNoArt(&((**raiz).esq), novoNo);
     } else {
-        inseriu = 1;
+        inseriu = 0;
     }
 
     return inseriu;
