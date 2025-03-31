@@ -4,8 +4,7 @@
 // definições das estruturas das informações e das árvores
 
 typedef struct InfoMusica {
-    char titulo[50];
-    int duracao;
+    int dado;
 } InfoMusica;
 
 typedef struct ArvMusica {
@@ -14,9 +13,7 @@ typedef struct ArvMusica {
 } ArvMusica;
 
 typedef struct InfoAlbum {
-    char titulo[50];
-    int anoLancamento;
-    int quantMusicas;
+    int dado;
     ArvMusica *musica;
 } InfoAlbum;
 
@@ -26,10 +23,7 @@ typedef struct ArvAlbum {
 } ArvAlbum;
 
 typedef struct InfoArtista {
-    char nome[50];
-    char tipo[50];
-    char estilo[50];
-    int numAlbuns;
+    int dado;
     ArvAlbum *album;
 } InfoArtista;
 
@@ -43,8 +37,10 @@ InfoMusica lerInfoMusica();
 ArvMusica* inicializarArvMus();
 ArvMusica* alocarNoMusica(InfoMusica info);
 int insereArvMus(ArvMusica **raiz, ArvMusica *novoNo);
-void imprimeArvMusc(ArvMusica *raiz);
+void imprimeArvMus(ArvMusica *raiz);
 void liberaArvMus(ArvMusica *raiz);
+ArvMusica* soUmFilhoMus(ArvMusica *raiz);
+int removerMus(ArvMusica **raiz, int valor);
 
 // declarações das funções de álbum
 InfoAlbum lerInfoAlbum();
