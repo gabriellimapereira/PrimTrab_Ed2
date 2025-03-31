@@ -58,6 +58,7 @@ void liberaArvAlbum(ArvAlbum *raiz) {
     if (raiz != NULL) {
         liberaArvMus((*raiz).esq);
         liberaArvMus((*raiz).dir);
+        liberaArvMus((*raiz).info.musica);
         free(raiz);
     }
 }
@@ -82,6 +83,7 @@ int removerAlbum(ArvAlbum **raiz, int valor) {
     if (*raiz != NULL) {
         if ((**raiz).info.dado == valor) {
             ArvAlbum *aux, *filho;
+            liberaArvMus((**raiz).info.musica);
             if ((**raiz).dir == NULL && (**raiz).esq == NULL) {
                 aux = *raiz;
                 *raiz = NULL;

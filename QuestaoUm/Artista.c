@@ -58,6 +58,7 @@ void liberaArvArt(ArvArtista *raiz) {
     if (raiz != NULL) {
         liberaArvArt((*raiz).esq);
         liberaArvArt((*raiz).dir);
+        liberaArvMus((*raiz).info.album);
         free(raiz);
     }
 }
@@ -82,6 +83,7 @@ int removerArt(ArvArtista **raiz, int valor) {
     if (*raiz != NULL) {
         if ((**raiz).info.dado == valor) {
             ArvArtista *aux, *filho;
+            liberaArvMus((**raiz).info.album);
             if ((**raiz).dir == NULL && (**raiz).esq == NULL) {
                 aux = *raiz;
                 *raiz = NULL;
