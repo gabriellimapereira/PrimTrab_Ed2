@@ -74,6 +74,20 @@ ArvMusica* soUmFilhoMus(ArvMusica *raiz) {
     return filho;
 }
 
+ArvMusica** menorDirMus(ArvMusica **raiz) {
+    ArvMusica **atual;
+
+    if ((**raiz).esq == NULL)  {
+        atual = raiz;
+    } else {
+        while ((**atual).esq != NULL) {
+            atual = &((**atual).esq);
+        }
+    }
+
+    return atual;
+}
+
 int removerMus(ArvMusica **raiz, int valor) {
     int removeu = 1;
 
@@ -90,11 +104,14 @@ int removerMus(ArvMusica **raiz, int valor) {
                     *raiz = filho;
                     free(aux);
                 } else {
-                    ArvMusica *maiorEsq = (**raiz).esq;
-                    while ((*maiorEsq).dir != NULL) maiorEsq = (*maiorEsq).dir;
+                    ArvMusica **menor;
 
-                    ((**raiz)).info.dado = (*maiorEsq).info.dado;
-                    removeu = removerMus(&((**raiz).esq), (*maiorEsq).info.dado);
+                    menor = menorDirMus(&((**raiz).dir)); 
+
+                    (**raiz).info = (**menor).info;
+                    aux = (*menor);
+                    (*menor) = (**menor).dir;
+                    free(aux);
                 }
             } 
         } else {

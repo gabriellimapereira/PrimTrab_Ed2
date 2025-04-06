@@ -77,6 +77,21 @@ ArvArtista* soUmFilhoArt(ArvArtista *raiz) {
     return filho;
 }
 
+
+ArvArtista** menorDirArt(ArvArtista **raiz) {
+    ArvArtista **atual;
+
+    if ((**raiz).esq == NULL)  {
+        atual = raiz;
+    } else {
+        while ((**atual).esq != NULL) {
+            atual = &((**atual).esq);
+        }
+    }
+
+    return atual;
+}
+
 int removerArt(ArvArtista **raiz, int valor) {
     int removeu = 1;
 
@@ -94,11 +109,14 @@ int removerArt(ArvArtista **raiz, int valor) {
                     *raiz = filho;
                     free(aux);
                 } else {
-                    ArvArtista *maiorEsq = (**raiz).esq;
-                    while ((*maiorEsq).dir != NULL) maiorEsq = (*maiorEsq).dir;
+                    ArvArtista **menor;
 
-                    ((**raiz)).info.dado = (*maiorEsq).info.dado;
-                    removeu = removerArt(&((**raiz).esq), (*maiorEsq).info.dado);
+                    menor = menorDirArt(&((**raiz).dir)); 
+
+                    (**raiz).info = (**menor).info;
+                    aux = (*menor);
+                    (*menor) = (**menor).dir;
+                    free(aux);
                 }
             } 
         } else {

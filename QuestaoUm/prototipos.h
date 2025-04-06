@@ -40,6 +40,7 @@ int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo);
 void imprimeArvMus(ArvMusica *raiz);
 void liberaArvMus(ArvMusica *raiz);
 ArvMusica* soUmFilhoMus(ArvMusica *raiz);
+ArvMusica** menorDirMus(ArvMusica **raiz);
 int removerMus(ArvMusica **raiz, int valor);
 
 // declarações das funções de álbum
@@ -50,6 +51,7 @@ int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo);
 void imprimeArvAlbum(ArvAlbum *raiz);
 void liberaArvAlbum(ArvAlbum *raiz);
 ArvMusica* soUmFilhoAlbum(ArvAlbum *raiz);
+ArvAlbum** menorDirAlbum(ArvAlbum **raiz);
 int removerAlbum(ArvAlbum **raiz, int valor);
 
 // declarações das funções de artista
@@ -60,6 +62,7 @@ int insereNoArt(ArvArtista **raiz, ArvArtista *novoNo);
 void imprimeArvArt(ArvArtista *raiz);
 void liberaArvArt(ArvArtista *raiz);
 ArvArtista* soUmFilhoArt(ArvArtista *raiz);
+ArvArtista** menorDirArt(ArvArtista **raiz);
 int removerArt(ArvArtista **raiz, int valor);
 
 #endif

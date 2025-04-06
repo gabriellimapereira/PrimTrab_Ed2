@@ -77,6 +77,20 @@ ArvAlbum* soUmFilhoAlbum(ArvAlbum *raiz) {
     return filho;
 }
 
+ArvAlbum** menorDirAlbum(ArvAlbum **raiz) {
+    ArvAlbum **atual;
+
+    if ((**raiz).esq == NULL)  {
+        atual = raiz;
+    } else {
+        while ((**atual).esq != NULL) {
+            atual = &((**atual).esq);
+        }
+    }
+
+    return atual;
+}
+
 int removerAlbum(ArvAlbum **raiz, int valor) {
     int removeu = 1;
 
@@ -94,11 +108,14 @@ int removerAlbum(ArvAlbum **raiz, int valor) {
                     *raiz = filho;
                     free(aux);
                 } else {
-                    ArvAlbum *maiorEsq = (**raiz).esq;
-                    while ((*maiorEsq).dir != NULL) maiorEsq = (*maiorEsq).dir;
+                    ArvAlbum **menor;
 
-                    ((**raiz)).info.dado = (*maiorEsq).info.dado;
-                    removeu = removerAlbum(&((**raiz).esq), (*maiorEsq).info.dado);
+                    menor = menorDirAlbum(&((**raiz).dir)); 
+
+                    (**raiz).info = (**menor).info;
+                    aux = (*menor);
+                    (*menor) = (**menor).dir;
+                    free(aux);
                 }
             } 
         } else {
