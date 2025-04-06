@@ -47,7 +47,7 @@ void liberarArvore(No *raiz) {
 }
 
 No** menorDir(No **raiz) {
-    No **atual = raiz;
+    No **atual;
 
     if ((*raiz)->esq == NULL)  {
         atual = raiz;
