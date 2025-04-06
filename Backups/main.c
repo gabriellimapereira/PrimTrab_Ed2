@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 
 typedef struct No {
     int dado;
@@ -44,33 +46,20 @@ void liberarArvore(No *raiz) {
     }
 }
 
-No** menorDir(No *r) {
-    No **menor;
+No** menorDir(No **raiz) {
+    No **atual = raiz;
 
-    if (r->esq != NULL) {
-        if (r->esq->esq != NULL) {
-            menor = &(r->esq->esq);
-        } else {
-            menor = menorDir(r->esq);
+    if ((*raiz)->esq == NULL)  {
+        atual = raiz;
+    } else {
+        while ((*atual)->esq != NULL) {
+            atual = &((*atual)->esq);
         }
-    } else {
-        menor = &(r);
     }
 
-    return menor;
+    return atual;
 }
 
-int direitaSemMenor(No *r) {
-    int valor;
-
-    if (r->dir->esq == NULL) {
-        valor = 1;
-    } else {
-        valor = 0;
-    }
-     
-    return valor;
-}
 
 int removerNo(No **raiz, int dado) {
     int removeu = 1;
@@ -91,11 +80,7 @@ int removerNo(No **raiz, int dado) {
                 } else {
                     No **menor;
 
-                    if (direitaSemMenor(*raiz)) {
-                        menor = &((*raiz)->dir);
-                    } else {
-                        menor = menorDir((*raiz)->dir);
-                    }
+                    menor = menorDir(&((*raiz)->dir)); // novo
 
                     (**raiz).dado = (*menor)->dado;
                     aux = (*menor);
@@ -116,24 +101,67 @@ int removerNo(No **raiz, int dado) {
     return removeu;
 }
 
+int removerNoAntigo(No **raiz, int dado) {
+    int removeu = 1;
+
+    if (*raiz != NULL) {
+        if ((**raiz).dado == dado) {
+            No *aux, *filho;
+            if ((**raiz).dir == NULL && (**raiz).esq == NULL) {
+                aux = *raiz;
+                *raiz = NULL;
+                free(aux);
+            } else {
+                if ((**raiz).esq == NULL || (**raiz).dir == NULL) {
+                    filho = (**raiz).esq ? (**raiz).esq : (**raiz).dir;
+                    aux = *raiz;
+                    *raiz = filho;
+                    free(aux);
+                } else {
+                    No *menorDir = (**raiz).dir;
+                    while ((*menorDir).esq != NULL) menorDir = (*menorDir).esq;
+
+                    ((**raiz)).dado = (*menorDir).dado;
+                    removeu = removerNo(&((**raiz).dir), (*menorDir).dado);
+                }
+            }
+        } else {
+            if ((**raiz).dado > dado) {
+                removeu = removerNoAntigo(&((**raiz).esq), dado);
+            } else {
+                removeu = removerNoAntigo(&((**raiz).dir), dado);
+            }
+        }
+    } else {
+        removeu = 0;
+    }
+
+    return removeu;
+}
+
+
 int main() {
+    printf("inicializando a main...\n");
+
     No *raiz = NULL;
+
     int valores[] = {1000, 300, 250, 200, 350, 2000, 3000, 3500, 3200, 1500, 1250, 1100, 1200, 1700, 1300, 100};
-    
-    for (int i = 0; i < 13; i++) {
+    int n = sizeof(valores) / sizeof(valores[0]);
+
+    for (int i = 0; i < n; i++) {
         raiz = inserirNo(raiz, valores[i]);
     }
-    
-    printf("\nÁrvore em ordem antes da remoção: ");
-    imprimirEmOrdem(raiz);
-    printf("\n");
-    
-    removerNo(&raiz, 1500);
 
-    printf("\nÁrvore em ordem após remover 1000: ");
+    printf("\nárvore em ordem antes da remoção:\n");
     imprimirEmOrdem(raiz);
     printf("\n");
-    
+
+    removerNo(&raiz, 1000);
+
+    printf("\nárvore em ordem depois da remoção do 2000:\n");
+    imprimirEmOrdem(raiz);
+    printf("\n");
+
     liberarArvore(raiz);
     return 0;
 }
