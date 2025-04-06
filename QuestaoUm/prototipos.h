@@ -50,7 +50,7 @@ ArvAlbum* alocarNoAlbum(InfoAlbum info);
 int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo);
 void imprimeArvAlbum(ArvAlbum *raiz);
 void liberaArvAlbum(ArvAlbum *raiz);
-ArvMusica* soUmFilhoAlbum(ArvAlbum *raiz);
+ArvAlbum* soUmFilhoAlbum(ArvAlbum *raiz);
 ArvAlbum** menorDirAlbum(ArvAlbum **raiz);
 int removerAlbum(ArvAlbum **raiz, int valor);
 

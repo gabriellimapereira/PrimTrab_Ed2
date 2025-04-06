@@ -30,7 +30,7 @@ ArvAlbum* alocarNoAlbum(InfoAlbum info) {
     return novoNo;
 }
 
-int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
+int insereArvAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
     int inseriu = 1;
 
     if (*raiz == NULL) {
@@ -56,8 +56,8 @@ void imprimeArvAlbum(ArvAlbum *raiz) {
 
 void liberaArvAlbum(ArvAlbum *raiz) {
     if (raiz != NULL) {
-        liberaArvMus((*raiz).esq);
-        liberaArvMus((*raiz).dir);
+        liberaArvAlbum((*raiz).esq);
+        liberaArvAlbum((*raiz).dir);
         liberaArvMus((*raiz).info.musica);
         free(raiz);
     }

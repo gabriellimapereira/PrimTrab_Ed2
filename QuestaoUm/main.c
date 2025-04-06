@@ -3,6 +3,7 @@
 #include "prototipos.h"
 
 void exibirMenu() {
+    ArvArtista *artista = inicializarArvArt();
     int opcao;
     
     do {
@@ -39,7 +40,7 @@ void exibirMenu() {
                 printf("Cadastrando música...\n");
                 break;
             case 4:
-                printf("Mostrando todos os artistas...\n");
+                imprimeArvArt(artista);
                 break;
             case 5:
                 printf("Mostrando artistas por tipo...\n");
@@ -90,6 +91,7 @@ void exibirMenu() {
 }
 
 int main() {
+    
     exibirMenu();
     return 0;
 }
