@@ -47,15 +47,10 @@ void liberarArvore(ArvBin *raiz) {
 }
 
 ArvBin** menorDir(ArvBin **raiz) {
-    ArvBin **atual;
+    ArvBin **atual = *raiz;
 
-    if ((*raiz)->esq == NULL)  {
-        atual = raiz;
-    } else {
-        while ((*atual)->esq != NULL) {
-            atual = &((*atual)->esq);
-        }
-    }
+    if ((*raiz)->esq != NULL)  
+        while ((*atual)->esq != NULL) atual = &((*atual)->esq);
 
     return atual;
 }

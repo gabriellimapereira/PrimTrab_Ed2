@@ -19,6 +19,32 @@ AVL* criarNo(int dado) {
     return novoNo;
 }
 
+void rotacaoEsq(AVL **r) {
+    AVL *aux = (**r).dir;
+    (**r).dir = (*aux).esq;
+    (*aux).esq = (*r);
+    (*r) = aux;
+}
+
+void rotacaoDir(AVL **r) {
+    AVL *aux = (**r).esq;
+    (**r).esq = (*aux).dir;
+    (*aux).dir = (*r);
+    (*r) = aux;
+}
+
+int fatorBalanceamento(AVL *r) { //esq - dir
+    int altE = -1, altD = -1;
+    if ((*r).dir) {
+        altD = (*r).dir->altura;
+    } 
+    if ((*r).esq) {
+        altE = (*r).esq->altura;
+    }
+
+    return altE - (altD);
+}
+
 int alturaArv(AVL *raiz) {
     int altura, alturaEsq, alturaDir;
 
@@ -35,16 +61,40 @@ int alturaArv(AVL *raiz) {
     return altura;
 }
 
-AVL* inserirNo(AVL *raiz, int dado) {
-    if (raiz == NULL) {
-        return criarNo(dado);
+void balanceamento(AVL **r) {
+    int fb;
+
+    fb = fatorBalanceamento(*r);
+    if (fb == 2) {
+        int fbEsq = fatorBalanceamento((**r).esq);
+        if (fbEsq < 0) rotacaoEsq(&((**r).esq));
+        rotacaoDir(r);
+    } else if (fb == -2) {
+        int fbDir = fatorBalanceamento((**r).dir);
+        if (fbDir > 0) rotacaoDir(&((**r).dir));
+        rotacaoEsq(r);
     }
-    if (dado < raiz->dado) {
-        raiz->esq = inserirNo(raiz->esq, dado);
-    } else if (dado > raiz->dado) {
-        raiz->dir = inserirNo(raiz->dir, dado);
-    } 
-    return raiz;
+}
+
+int insere(AVL **raiz, AVL *novoNo) {
+    int inseriu = 1;
+
+    if (*raiz == NULL) {
+        *raiz = novoNo;
+    } else if ((**raiz).dado <  (*novoNo).dado) {
+        inseriu = insere(&((**raiz).dir), novoNo);
+    } else if ((**raiz).dado > (*novoNo).dado) {
+        inseriu = insere(&((**raiz).esq), novoNo);
+    } else 
+        inseriu = 0;
+    
+
+    if (inseriu) {
+        balanceamento(raiz);
+        (**raiz).altura = alturaArv((*raiz));
+    }
+
+    return inseriu;
 }
 
 void imprimirEmOrdem(AVL *raiz) {
@@ -63,22 +113,8 @@ void liberarArvore(AVL *raiz) {
     }
 }
 
-void rotacaoEsq(AVL **r) {
-    AVL *aux = (**r).dir;
-    (**r).dir = (*aux).esq;
-    (*aux).esq = (*r);
-    (*r) = aux;
-}
-
-void rotacaoDir(AVL **r) {
-    AVL *aux = (**r).esq;
-    (**r).esq = (*aux).dir;
-    (*aux).dir = (*r);
-    (*r) = aux;
-}
-
 AVL** menorDir(AVL **raiz) {
-    AVL **atual = *raiz;
+    AVL **atual = raiz;
 
     if ((*raiz)->esq != NULL)  
         while ((*atual)->esq != NULL) atual = &((*atual)->esq);
@@ -121,9 +157,13 @@ int removerNo(AVL **raiz, int dado) {
                 removeu = removerNo(&((**raiz).dir), dado);
             }
         }
-
     } else 
         removeu = 0;
+
+    if (*raiz && removeu) {
+        balanceamento(raiz);
+        (**raiz).altura = alturaArv((*raiz));
+    }
     
     return removeu;
 }
@@ -166,7 +206,6 @@ int removerNoAntigo(AVL **raiz, int dado) {
     return removeu;
 }
 
-
 int main() {
     printf("inicializando a main...\n");
 
@@ -175,16 +214,24 @@ int main() {
     int valores[] = {1000, 300, 250, 200, 350, 2000, 3000, 3500, 3200, 1500, 1250, 1100, 1200, 1700, 1300, 100};
     int n = sizeof(valores) / sizeof(valores[0]);
 
-    for (int i = 0; i < n; i++) raiz = inserirNo(raiz, valores[i]);
-
+    for (int i = 0; i < n; i++) {
+        AVL *novoNo = criarNo(valores[i]);
+        if (novoNo != NULL) {
+            insere(&raiz, novoNo);
+            printf("\ninseriu o %d!", novoNo->dado);
+            printf("\nárvore em ordem antes da nova inserção:\n");
+            imprimirEmOrdem(raiz);
+        }
+    }
 
     printf("\nárvore em ordem antes da remoção:\n");
     imprimirEmOrdem(raiz);
     printf("\n");
 
-    removerNo(&raiz, 2000);
+    printf("removendo...\n");
+    removerNo(&raiz, 350);
 
-    printf("\nárvore em ordem depois da remoção do 2000:\n");
+    printf("\nárvore em ordem depois da remoção do 350:\n");
     imprimirEmOrdem(raiz);
     printf("\n");
 
