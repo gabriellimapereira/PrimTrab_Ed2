@@ -8,9 +8,9 @@ void exibirMenu() {
     
     do {
         printf("\n---------- Menu ----------\n");
-        printf("1. Cadastrar Artista\n");
-        printf("2. Cadastrar Álbum\n");
-        printf("3. Cadastrar Música\n");
+        printf("1. Cadastrar os artistas de teste\n");
+        printf("2. Cadastrar os álbuns de teste\n");
+        printf("3. Cadastrar as músicas de teste\n");
         printf("4. Mostrar todos os artistas\n");
         printf("5. Mostrar artistas por tipo\n");
         printf("6. Mostrar artistas por estilo musical\n");
@@ -31,13 +31,61 @@ void exibirMenu() {
         
         switch (opcao) {
             case 1:
-                printf("Cadastrando artista...\n");
+                InfoArtista infoArtistas[17] = {{30000, NULL}, {20000, NULL}, {55000, NULL}, {15000, NULL}, {25000, NULL}, 
+                                        {50000, NULL}, {70000, NULL}, {12000, NULL}, {17000, NULL}, {40000, NULL}, 
+                                        {53000, NULL}, {80000, NULL}, {10000, NULL}, {35000, NULL}, {45000, NULL}, 
+                                        {75000, NULL}, {37000, NULL}};
+                int i = 0;
+                while (i < 17) {
+                    ArvArtista *novoNo = alocarNoArt(infoArtistas[i]);
+                    if (novoNo != NULL) {
+                        if (insereNoArt(&artista, novoNo)) {
+                            printf("Artista %d cadastrado com sucesso!\n", infoArtistas[i].dado);
+                        } else {
+                            printf("Artista %d já existe!\n", infoArtistas[i].dado);
+                            free(novoNo);
+                        }
+                    }
+                    i++;
+                }
                 break;
             case 2:
-                printf("Cadastrando álbum...\n");
+                InfoAlbum infoAlbuns[17] = {{3000, NULL}, {2000, NULL}, {5500, NULL}, {1500, NULL}, {25000, NULL}, 
+                                        {5000, NULL}, {7000, NULL}, {1200, NULL}, {1700, NULL}, {4000, NULL}, 
+                                        {5300, NULL}, {8000, NULL}, {1000, NULL}, {3500, NULL}, {4500, NULL}, 
+                                        {7500, NULL}, {3700, NULL}};
+                i = 0;
+                while (i < 17) {
+                    ArvAlbum *novoNo = alocarNoAlbum(infoAlbuns[i]);
+                    if (novoNo != NULL) {
+                        if (insereNoAlbum(&((*artista).info.album), novoNo)) {
+                            printf("Album %d cadastrado com sucesso!\n", infoAlbuns[i].dado);
+                        } else {
+                            printf("Album %d já existe!\n", infoAlbuns[i].dado);
+                            free(novoNo);
+                        }
+                    }
+                    i++;
+                }
                 break;
             case 3:
-                printf("Cadastrando música...\n");
+                InfoMusica array[17] = {{300}, {200}, {550}, {150}, {2500}, 
+                                        {500}, {700}, {120}, {170}, {400}, 
+                                        {530}, {800}, {100}, {350}, {450}, 
+                                        {750}, {370}};
+                i = 0;
+                while (i < 17) {
+                    ArvMusica *novoNo = alocarNoMusica(array[i]);
+                    if (novoNo != NULL) {
+                        if (insereNoMus(&((*artista).info.album->info.musica), novoNo)) {
+                            printf("Mus %d cadastrado com sucesso!\n", array[i].dado);
+                        } else {
+                            printf("Mus %d já existe!\n", array[i].dado);
+                            free(novoNo);
+                        }
+                    }
+                    i++;
+                }
                 break;
             case 4:
                 imprimeArvArt(artista);

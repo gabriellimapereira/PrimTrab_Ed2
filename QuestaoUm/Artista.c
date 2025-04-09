@@ -50,6 +50,7 @@ void imprimeArvArt(ArvArtista *raiz) {
     if (raiz != NULL) {
         imprimeArvArt((*raiz).esq);
         printf("Dado: %d\n", (*raiz).info.dado);
+        imprimeArvAlbum(((*raiz).info.album));
         imprimeArvArt((*raiz).dir);
     }
 }

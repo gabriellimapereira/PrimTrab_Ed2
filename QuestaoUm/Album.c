@@ -30,15 +30,15 @@ ArvAlbum* alocarNoAlbum(InfoAlbum info) {
     return novoNo;
 }
 
-int insereArvAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
+int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
     int inseriu = 1;
 
     if (*raiz == NULL) {
         *raiz = novoNo;
     } else if ((**raiz).info.dado <  (*novoNo).info.dado) {
-        inseriu = insereArvAlbum(&((**raiz).dir), novoNo);
+        inseriu = insereNoAlbum(&((**raiz).dir), novoNo);
     } else if ((**raiz).info.dado > (*novoNo).info.dado) {
-        inseriu = insereArvAlbum(&((**raiz).esq), novoNo);
+        inseriu = insereNoAlbum(&((**raiz).esq), novoNo);
     } else {
         inseriu = 0;
     }
@@ -50,6 +50,7 @@ void imprimeArvAlbum(ArvAlbum *raiz) {
     if (raiz != NULL) {
         imprimeArvAlbum((*raiz).esq);
         printf("Dado: %d\n", (*raiz).info.dado);
+        imprimeArvMus(((*raiz).info.musica));
         imprimeArvAlbum((*raiz).dir);
     }
 }
