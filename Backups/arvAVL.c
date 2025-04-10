@@ -33,24 +33,13 @@ void rotacaoDir(AVL **r) {
     (*r) = aux;
 }
 
-int fatorBalanceamento(AVL *r) { //esq - dir
-    int altE = -1, altD = -1;
-    if ((*r).dir) {
-        altD = (*r).dir->altura;
-    } 
-    if ((*r).esq) {
-        altE = (*r).esq->altura;
-    }
-
-    return altE - (altD);
-}
-
 int alturaArv(AVL *raiz) {
-    int altura, alturaEsq, alturaDir;
+    int altura;
 
     if (raiz) {
-        alturaEsq = alturaArv(raiz->esq);
-        alturaDir = alturaArv(raiz->dir);
+        int alturaEsq = -1, alturaDir = -1;
+        if ((*raiz).esq) alturaEsq = (*raiz).esq->altura;
+        if ((*raiz).dir) alturaDir = (*raiz).dir->altura;
         if (alturaEsq > alturaDir)
             altura = alturaEsq + 1;
         else 
@@ -61,15 +50,27 @@ int alturaArv(AVL *raiz) {
     return altura;
 }
 
+int fatorBalanceamento(AVL *r) { //esq - dir
+    return alturaArv((*r).esq) - alturaArv((*r).dir);
+}
+
+void ajustarAltura(AVL **r) {
+    if (*r) {
+        ajustarAltura(&((**r).esq));
+        ajustarAltura(&((**r).dir));
+        (**r).altura = alturaArv(*r);
+    }
+}
+
 void balanceamento(AVL **r) {
     int fb;
 
     fb = fatorBalanceamento(*r);
-    if (fb == 2) {
+    if (fb > 1) {
         int fbEsq = fatorBalanceamento((**r).esq);
         if (fbEsq < 0) rotacaoEsq(&((**r).esq));
         rotacaoDir(r);
-    } else if (fb == -2) {
+    } else if (fb < -1) {
         int fbDir = fatorBalanceamento((**r).dir);
         if (fbDir > 0) rotacaoDir(&((**r).dir));
         rotacaoEsq(r);
@@ -89,9 +90,9 @@ int insere(AVL **raiz, AVL *novoNo) {
         inseriu = 0;
     
 
-    if (inseriu) {
+    if (*raiz && inseriu) {
         balanceamento(raiz);
-        (**raiz).altura = alturaArv((*raiz));
+        ajustarAltura(raiz);
     }
 
     return inseriu;
@@ -116,8 +117,7 @@ void liberarArvore(AVL *raiz) {
 AVL** menorDir(AVL **raiz) {
     AVL **atual = raiz;
 
-    if ((*raiz)->esq != NULL)  
-        while ((*atual)->esq != NULL) atual = &((*atual)->esq);
+    if ((*raiz)->esq != NULL) while ((*atual)->esq != NULL) atual = &((*atual)->esq);
     
     return atual;
 }
@@ -151,18 +151,18 @@ int removerNo(AVL **raiz, int dado) {
             }
 
         } else {
-            if ((**raiz).dado > dado) {
+            if ((**raiz).dado > dado) 
                 removeu = removerNo(&((**raiz).esq), dado);
-            } else {
+            else 
                 removeu = removerNo(&((**raiz).dir), dado);
-            }
         }
     } else 
         removeu = 0;
+    
 
     if (*raiz && removeu) {
         balanceamento(raiz);
-        (**raiz).altura = alturaArv((*raiz));
+        ajustarAltura(raiz);
     }
     
     return removeu;
@@ -193,16 +193,14 @@ int removerNoAntigo(AVL **raiz, int dado) {
                 }
             }
         } else {
-            if ((**raiz).dado > dado) {
+            if ((**raiz).dado > dado) 
                 removeu = removerNoAntigo(&((**raiz).esq), dado);
-            } else {
+            else 
                 removeu = removerNoAntigo(&((**raiz).dir), dado);
-            }
         }
     } else 
         removeu = 0;
     
-
     return removeu;
 }
 
@@ -217,10 +215,8 @@ int main() {
     for (int i = 0; i < n; i++) {
         AVL *novoNo = criarNo(valores[i]);
         if (novoNo != NULL) {
-            insere(&raiz, novoNo);
-            printf("\ninseriu o %d!", novoNo->dado);
-            printf("\nárvore em ordem antes da nova inserção:\n");
-            imprimirEmOrdem(raiz);
+            int inseriu = insere(&raiz, novoNo);
+            if (inseriu) printf("\ninserção do %d concluída!\n", (*novoNo).dado);
         }
     }
 
@@ -230,10 +226,12 @@ int main() {
 
     printf("removendo...\n");
     removerNo(&raiz, 350);
+    raiz->altura = alturaArv(raiz);
 
     printf("\nárvore em ordem depois da remoção do 350:\n");
     imprimirEmOrdem(raiz);
     printf("\n");
+
 
     liberarArvore(raiz);
     return 0;
