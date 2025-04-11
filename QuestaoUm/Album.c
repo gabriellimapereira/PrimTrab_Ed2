@@ -6,8 +6,11 @@
 InfoAlbum lerInfoAlbum() {
     InfoAlbum info;
 
-    printf("Digite o dado: ");
-    scanf("%d", &info.dado);
+    printf("Digite o título: ");
+    scanf("%s", info.titulo);
+    printf("Digite o ano de lançamento: ");
+    scanf("%d", &info.ano);
+    info.quantMus = 0;
 
     info.musica = NULL;
 
@@ -30,105 +33,50 @@ ArvAlbum* alocarNoAlbum(InfoAlbum info) {
     return novoNo;
 }
 
-int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo) {
+int insereNoAlbum(ArvAlbum **r, ArvAlbum *novoNo) {
     int inseriu = 1;
 
-    if (*raiz == NULL) {
-        *raiz = novoNo;
-    } else if ((**raiz).info.dado <  (*novoNo).info.dado) {
-        inseriu = insereNoAlbum(&((**raiz).dir), novoNo);
-    } else if ((**raiz).info.dado > (*novoNo).info.dado) {
-        inseriu = insereNoAlbum(&((**raiz).esq), novoNo);
-    } else {
+    if (*r == NULL) 
+        *r = novoNo;
+    else if (strcmp((**r).info.titulo, (*novoNo).info.titulo) < 0) 
+        inseriu = insereNoAlbum(&((**r).dir), novoNo);
+    else if (strcmp((**r).info.titulo, (*novoNo).info.titulo) > 0) 
+        inseriu = insereNoAlbum(&((**r).esq), novoNo);
+    else 
         inseriu = 0;
-    }
+    
 
     return inseriu;
 }
 
-void imprimeArvAlbum(ArvAlbum *raiz) {
-    if (raiz != NULL) {
-        imprimeArvAlbum((*raiz).esq);
-        printf("Dado: %d\n", (*raiz).info.dado);
-        imprimeArvMus(((*raiz).info.musica));
-        imprimeArvAlbum((*raiz).dir);
+void imprimeArvAlbum(ArvAlbum *r) {
+    if (r != NULL) {
+        imprimeArvAlbum((*r).esq);
+        printf("Álbum: %s\n", (*r).info.titulo);
+        imprimeArvMus(((*r).info.musica));
+        imprimeArvAlbum((*r).dir);
     }
 }
 
-void liberaArvAlbum(ArvAlbum *raiz) {
-    if (raiz != NULL) {
-        liberaArvAlbum((*raiz).esq);
-        liberaArvAlbum((*raiz).dir);
-        liberaArvMus((*raiz).info.musica);
-        free(raiz);
+void liberaArvAlbum(ArvAlbum *r) {
+    if (r != NULL) {
+        liberaArvAlbum((*r).esq);
+        liberaArvAlbum((*r).dir);
+        liberaArvMus((*r).info.musica);
+        free(r);
     }
 }
 
-ArvAlbum* soUmFilhoAlbum(ArvAlbum *raiz) {
-    ArvAlbum *filho;
-
-    if ((*raiz).dir == NULL) {
-        filho = (*raiz).esq;
-    } else if ((*raiz).esq == NULL) {
-        filho = (*raiz).dir;
-    } else {
-        filho = NULL;
+ArvAlbum* buscarAlbum(ArvAlbum *r, const char *titulo) {
+    ArvAlbum *aux = NULL;
+    if (r != NULL) {
+        int cmp = strcmp(titulo, (*r).info.titulo);
+        if (cmp == 0)
+            aux = r;
+        else if (cmp < 0)
+            aux = buscarAlbum((*r).esq, titulo);
+        else
+            aux = buscarAlbum((*r).dir, titulo);
     }
-
-    return filho;
+    return aux;
 }
-
-ArvAlbum** menorDirAlbum(ArvAlbum **raiz) {
-    ArvAlbum **atual;
-
-    if ((**raiz).esq == NULL)  {
-        atual = raiz;
-    } else {
-        while ((**atual).esq != NULL) {
-            atual = &((**atual).esq);
-        }
-    }
-
-    return atual;
-}
-
-int removerAlbum(ArvAlbum **raiz, int valor) {
-    int removeu = 1;
-
-    if (*raiz != NULL) {
-        if ((**raiz).info.dado == valor) {
-            ArvAlbum *aux, *filho;
-            liberaArvMus((**raiz).info.musica);
-            if ((**raiz).dir == NULL && (**raiz).esq == NULL) {
-                aux = *raiz;
-                *raiz = NULL;
-                free(aux);
-            } else {
-                if ((filho = soUmFilhoAlbum(*raiz)) != NULL) {
-                    aux = *raiz;
-                    *raiz = filho;
-                    free(aux);
-                } else {
-                    ArvAlbum **menor;
-
-                    menor = menorDirAlbum(&((**raiz).dir)); 
-
-                    (**raiz).info = (**menor).info;
-                    aux = (*menor);
-                    (*menor) = (**menor).dir;
-                    free(aux);
-                }
-            } 
-        } else {
-            if ((**raiz).info.dado > valor) {
-                removeu = removerAlbum(&((**raiz).esq), valor);
-            } else {
-                removeu = removerAlbum(&((**raiz).dir), valor);
-            }
-        }
-    } else {
-        removeu = 0;
-    }
-    return removeu;
-}
-

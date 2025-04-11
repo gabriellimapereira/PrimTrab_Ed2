@@ -1,10 +1,9 @@
-#ifndef PROTOTIPOS
-#define PROTOTIPOS
+#pragma once
 
 // definições das estruturas das informações e das árvores
-
 typedef struct InfoMusica {
-    int dado;
+    char titulo[50];
+    int duracao;
 } InfoMusica;
 
 typedef struct ArvMusica {
@@ -13,7 +12,9 @@ typedef struct ArvMusica {
 } ArvMusica;
 
 typedef struct InfoAlbum {
-    int dado;
+    char titulo[50];
+    int ano;
+    int quantMus;
     ArvMusica *musica;
 } InfoAlbum;
 
@@ -23,8 +24,11 @@ typedef struct ArvAlbum {
 } ArvAlbum;
 
 typedef struct InfoArtista {
-    int dado;
-    ArvAlbum *album;
+    char nome[50];
+    char tipo[50];
+    char estilo[50];
+    int quantAlbum;
+    struct ArvAlbum *album;
 } InfoArtista;
 
 typedef struct ArvArtista {
@@ -36,33 +40,35 @@ typedef struct ArvArtista {
 InfoMusica lerInfoMusica();
 ArvMusica* inicializarArvMus();
 ArvMusica* alocarNoMusica(InfoMusica info);
-int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo);
-void imprimeArvMus(ArvMusica *raiz);
-void liberaArvMus(ArvMusica *raiz);
-ArvMusica* soUmFilhoMus(ArvMusica *raiz);
-ArvMusica** menorDirMus(ArvMusica **raiz);
-int removerMus(ArvMusica **raiz, int valor);
+int insereNoMus(ArvMusica **r, ArvMusica *novoNo);
+void imprimeArvMus(ArvMusica *r);
+void liberaArvMus(ArvMusica *r);
+ArvMusica* soUmFilhoMus(ArvMusica *r);
+ArvMusica** menorDirMus(ArvMusica **r);
+int removerMus(ArvMusica **r, char *titulo);
 
 // declarações das funções de álbum
 InfoAlbum lerInfoAlbum();
 ArvAlbum* inicializarArvAlbum();
 ArvAlbum* alocarNoAlbum(InfoAlbum info);
-int insereNoAlbum(ArvAlbum **raiz, ArvAlbum *novoNo);
-void imprimeArvAlbum(ArvAlbum *raiz);
-void liberaArvAlbum(ArvAlbum *raiz);
-ArvAlbum* soUmFilhoAlbum(ArvAlbum *raiz);
-ArvAlbum** menorDirAlbum(ArvAlbum **raiz);
-int removerAlbum(ArvAlbum **raiz, int valor);
+int insereNoAlbum(ArvAlbum **r, ArvAlbum *novoNo);
+void imprimeArvAlbum(ArvAlbum *r);
+void liberaArvAlbum(ArvAlbum *r);
+ArvAlbum* buscarAlbum(ArvAlbum *r, const char *titulo);
 
 // declarações das funções de artista
 InfoArtista lerInfoArt();
 ArvArtista* inicializarArvArt();
 ArvArtista* alocarNoArt(InfoArtista info);
-int insereNoArt(ArvArtista **raiz, ArvArtista *novoNo);
-void imprimeArvArt(ArvArtista *raiz);
-void liberaArvArt(ArvArtista *raiz);
-ArvArtista* soUmFilhoArt(ArvArtista *raiz);
-ArvArtista** menorDirArt(ArvArtista **raiz);
-int removerArt(ArvArtista **raiz, int valor);
+int insereNoArt(ArvArtista **r, ArvArtista *novoNo);
+void imprimeArvArt(ArvArtista *r);
+void liberaArvArt(ArvArtista *r);
+ArvArtista* soUmFilhoArt(ArvArtista *r);
+ArvArtista** menorDirArt(ArvArtista **r);
+int removerArt(ArvArtista **r, char *nome);
+ArvArtista* buscarArtista(ArvArtista *r, const char *nome);
 
-#endif
+// questões de impressão
+void artistaPorTipo(ArvArtista *r, const char *tipo);
+void artistaPorEstilo(ArvArtista *r, const char *estilo);
+void artistaPorTipoEstilo(ArvArtista *r, const char *tipo, const char *estilo);

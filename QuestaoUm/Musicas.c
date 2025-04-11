@@ -6,8 +6,10 @@
 InfoMusica lerInfoMusica() {
     InfoMusica info;
 
-    printf("Digite o dado: ");
-    scanf("%d", &info.dado);
+    printf("Digite o título: ");
+    scanf("%s", info.titulo);
+    printf("Digite a duração: ");
+    scanf("%d", &info.duracao);
 
     return info;
 }
@@ -28,101 +30,92 @@ ArvMusica* alocarNoMusica(InfoMusica info) {
     return novoNo;
 }
 
-int insereNoMus(ArvMusica **raiz, ArvMusica *novoNo) {
+int insereNoMus(ArvMusica **r, ArvMusica *novoNo) {
     int inseriu = 1;
 
-    if (*raiz == NULL) {
-        *raiz = novoNo;
-    } else if ((**raiz).info.dado <  (*novoNo).info.dado) {
-        inseriu = insereNoMus(&((**raiz).dir), novoNo);
-    } else if ((**raiz).info.dado > (*novoNo).info.dado) {
-        inseriu = insereNoMus(&((**raiz).esq), novoNo);
-    } else {
+    if (*r == NULL) 
+        *r = novoNo;
+    else if (strcmp((**r).info.titulo, (*novoNo).info.titulo) < 0) 
+        inseriu = insereNoMus(&((**r).dir), novoNo);
+    else if (strcmp((**r).info.titulo, (*novoNo).info.titulo) > 0) 
+        inseriu = insereNoMus(&((**r).esq), novoNo);
+    else 
         inseriu = 0;
-    }
 
     return inseriu;
 }
 
-void imprimeArvMus(ArvMusica *raiz) {
-    if (raiz != NULL) {
-        imprimeArvMus((*raiz).esq);
-        printf("Dado: %d\n", (*raiz).info.dado);
-        imprimeArvMus((*raiz).dir);
+void imprimeArvMus(ArvMusica *r) {
+    if (r != NULL) {
+        imprimeArvMus((*r).esq);
+        printf("Título da música: %s\n", (*r).info.titulo);
+        imprimeArvMus((*r).dir);
     }
 }
 
-void liberaArvMus(ArvMusica *raiz) {
-    if (raiz != NULL) {
-        liberaArvMus((*raiz).esq);
-        liberaArvMus((*raiz).dir);
-        free(raiz);
+void liberaArvMus(ArvMusica *r) {
+    if (r != NULL) {
+        liberaArvMus((*r).esq);
+        liberaArvMus((*r).dir);
+        free(r);
     }
 }
 
-ArvMusica* soUmFilhoMus(ArvMusica *raiz) {
+ArvMusica* soUmFilhoMus(ArvMusica *r) {
     ArvMusica *filho;
 
-    if ((*raiz).dir == NULL) {
-        filho = (*raiz).esq;
-    } else if ((*raiz).esq == NULL) {
-        filho = (*raiz).dir;
-    } else {
+    if ((*r).dir == NULL) {
+        filho = (*r).esq;
+    } else if ((*r).esq == NULL) {
+        filho = (*r).dir;
+    } else 
         filho = NULL;
-    }
 
     return filho;
 }
 
-ArvMusica** menorDirMus(ArvMusica **raiz) {
-    ArvMusica **atual;
+ArvMusica** menorDirMus(ArvMusica **r) {
+    ArvMusica **atual = r;
 
-    if ((**raiz).esq == NULL)  {
-        atual = raiz;
-    } else {
-        while ((**atual).esq != NULL) {
-            atual = &((**atual).esq);
-        }
-    }
+    if ((**r).esq != NULL) while ((**atual).esq != NULL) atual = &((**atual).esq);
 
     return atual;
 }
 
-int removerMus(ArvMusica **raiz, int valor) {
+int removerMus(ArvMusica **r, char *titulo) {
     int removeu = 1;
 
-    if (*raiz != NULL) {
-        if ((**raiz).info.dado == valor) {
+    if (*r != NULL) {
+        if (strcmp((**r).info.titulo, titulo) == 0) {
             ArvMusica *aux, *filho;
-            if ((**raiz).dir == NULL && (**raiz).esq == NULL) {
-                aux = *raiz;
-                *raiz = NULL;
+            if ((**r).dir == NULL && (**r).esq == NULL) {
+                aux = *r;
+                *r = NULL;
                 free(aux);
             } else {
-                if ((filho = soUmFilhoMus(*raiz)) != NULL) {
-                    aux = *raiz;
-                    *raiz = filho;
+                if ((filho = soUmFilhoMus(*r)) != NULL) {
+                    aux = *r;
+                    *r = filho;
                     free(aux);
                 } else {
                     ArvMusica **menor;
 
-                    menor = menorDirMus(&((**raiz).dir)); 
+                    menor = menorDirMus(&((**r).dir)); 
 
-                    (**raiz).info = (**menor).info;
+                    (**r).info = (**menor).info;
                     aux = (*menor);
                     (*menor) = (**menor).dir;
                     free(aux);
                 }
             } 
         } else {
-            if ((**raiz).info.dado > valor) {
-                removeu = removerMus(&((**raiz).esq), valor);
-            } else {
-                removeu = removerMus(&((**raiz).dir), valor);
-            }
+            if (strcmp((**r).info.titulo, titulo) > 0) 
+                removeu = removerMus(&((**r).esq), titulo);
+             else 
+                removeu = removerMus(&((**r).dir), titulo);
         }
-    } else {
+    } else 
         removeu = 0;
-    }
+    
     return removeu;
 }
