@@ -1,5 +1,7 @@
 #pragma once
 
+//alternativas que faltam da questao um: xi até xvii
+
 // definições das estruturas das informações e das árvores
 typedef struct InfoMusica {
     char titulo[50];
@@ -72,3 +74,7 @@ ArvArtista* buscarArtista(ArvArtista *r, const char *nome);
 void artistaPorTipo(ArvArtista *r, const char *tipo);
 void artistaPorEstilo(ArvArtista *r, const char *estilo);
 void artistaPorTipoEstilo(ArvArtista *r, const char *tipo, const char *estilo);
+void albunsArtista(ArvArtista *r, const char *artista);
+void imprimeAlbumAno(ArvAlbum *r, int ano);
+void musicasEspecificas(ArvArtista *r, const char *artista, const char *album);
+void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album);

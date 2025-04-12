@@ -174,5 +174,5 @@ void artistaPorTipoEstilo(ArvArtista *r, const char *tipo, const char *estilo) {
             imprimeArvAlbum(((*r).info.album));
         }
         artistaPorTipoEstilo((*r).dir, tipo, estilo);
-    }
+    } 
 }

@@ -119,3 +119,65 @@ int removerMus(ArvMusica **r, char *titulo) {
     
     return removeu;
 }
+
+ArvMusica* buscarMusica(ArvMusica *r, const char *nome) {
+    ArvMusica *aux = NULL;
+    if (r != NULL) {
+        int cmp = strcmp(nome, (*r).info.titulo);
+        if (cmp == 0)
+            aux = r;
+        else if (cmp < 0)
+            aux = buscarMusica((*r).esq, nome);
+        else
+            aux = buscarMusica((*r).dir, nome);
+    }
+    return aux;
+}
+
+void musicasEspecificas(ArvArtista *r, const char *artista, const char *album) {
+    if (r) {
+        ArvArtista *art = buscarArtista(r, artista);
+        if (art) {
+            ArvAlbum *alb = buscarAlbum((*art).info.album, album);
+            if (alb) imprimeArvMus((*alb).info.musica);
+        }
+    }
+}
+
+int nomeAlbum(ArvAlbum *r, const char *musica, int *duracao, char *album) {
+    int achou = 1;
+
+    if (r) {
+        ArvMusica *noMus = buscarMusica(r->info.musica, musica);
+        if (noMus) {
+            strcpy(album, r->info.titulo);
+            *duracao = (*noMus).info.duracao;
+        } else {
+            int esq = nomeAlbum(r->esq, musica, duracao, album);
+            if (esq != 0) {
+                achou = esq;
+            } else {
+                achou = nomeAlbum(r->dir, musica, duracao, album);
+            }
+        }
+    } else 
+        achou = 0;
+
+    return achou;
+}
+
+
+void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album) {
+    char *nome = NULL;
+
+    if (r) {
+        int achou = nomeAlbum((*r).info.album, musica, duracao, album);
+        if (achou) {
+            printf("Artista: %s Álbum: %s Duração: %d", (*r).info.nome, album, *duracao);
+        } else {
+            nomeArtista((*r).esq, musica, duracao, album);
+            nomeArtista((*r).dir, musica, duracao, album);
+        }
+    }
+}
+

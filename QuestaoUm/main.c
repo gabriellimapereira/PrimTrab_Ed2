@@ -51,8 +51,10 @@ int main() {
     }
 
     insereNoAlbum(&((*raizArtista).info.album), alocarNoAlbum(vetorAlbum[0]));
+    insereNoAlbum(&((*raizArtista->esq).info.album), alocarNoAlbum(vetorAlbum[1]));
 
     int inseriu = insercao(raizArtista, "5", "10", alocarNoMusica(vetorMusicas[0]));
+    inseriu = insercao(raizArtista, "3", "11", alocarNoMusica(vetorMusicas[1]));
     if (inseriu) printf("deu certo!\n");
 
     int op;
@@ -65,6 +67,7 @@ int main() {
         printf("5 - Imprimir artistas por tipo\n");
         printf("6 - Imprimir artistas por estilo\n");
         printf("7 - Imprimir artistas por tipo e estilo\n");
+        printf("8 - A proibida...\n");
         printf("0 - Sair\n");
         printf("Escolha: ");
         scanf("%d", &op);
@@ -89,6 +92,13 @@ int main() {
                 break;
             case 7:
                 artistaPorTipoEstilo(raizArtista, "7", "5");
+                break;
+            case 8:
+                const char *musica = "101"; 
+                int duracao;
+                char album[100];
+
+                dadosMusica(raizArtista, musica, &duracao, album);
                 break;
             case 0:
                 printf("Saindo...\n");

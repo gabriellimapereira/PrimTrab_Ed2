@@ -45,7 +45,6 @@ int insereNoAlbum(ArvAlbum **r, ArvAlbum *novoNo) {
     else 
         inseriu = 0;
     
-
     return inseriu;
 }
 
@@ -79,4 +78,19 @@ ArvAlbum* buscarAlbum(ArvAlbum *r, const char *titulo) {
             aux = buscarAlbum((*r).dir, titulo);
     }
     return aux;
+}
+
+void albunsArtista(ArvArtista *r, const char *artista) {
+    if (r) {
+        ArvArtista *art = buscarArtista(r, artista);
+        if (art) imprimeArvAlbum((*r).info.album);
+    }
+}
+
+void imprimeAlbumAno(ArvAlbum *r, int ano) { // tem que verificar por fora e chamar fora tbm
+    if (r) {
+        imprimeAlbumAno((*r).esq, ano);
+        if ((*r).info.ano == ano) printf("%s", (*r).info.titulo);
+        imprimeAlbumAno((*r).dir, ano);
+    }
 }
