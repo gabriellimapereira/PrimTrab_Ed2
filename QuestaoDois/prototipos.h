@@ -10,6 +10,7 @@ typedef struct InfoMusica {
 
 typedef struct ArvMusica {
     InfoMusica info;
+    int altura;
     struct ArvMusica *esq, *dir;
 } ArvMusica;
 
@@ -22,6 +23,7 @@ typedef struct InfoAlbum {
 
 typedef struct ArvAlbum {
     InfoAlbum info;
+    int altura;
     struct ArvAlbum *esq, *dir;
 } ArvAlbum;
 
@@ -35,6 +37,7 @@ typedef struct InfoArtista {
 
 typedef struct ArvArtista {
     InfoArtista info;
+    int altura;
     struct ArvArtista *esq, *dir;
 } ArvArtista;
 

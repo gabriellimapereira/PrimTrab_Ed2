@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 typedef struct ArvBin {
     int dado;
     struct ArvBin *esq, *dir;
@@ -54,7 +53,6 @@ ArvBin** menorDir(ArvBin **raiz) {
 
     return atual;
 }
-
 
 int removerNo(ArvBin **raiz, int dado) {
     int removeu = 1;

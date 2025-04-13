@@ -89,7 +89,6 @@ int insere(AVL **raiz, AVL *novoNo) {
     } else 
         inseriu = 0;
     
-
     if (*raiz && inseriu) {
         balanceamento(raiz);
         ajustarAltura(raiz);
