@@ -67,7 +67,7 @@ void imprimeArvMus(ArvMusica *r);
 void liberaArvMus(ArvMusica *r);
 ArvMusica* soUmFilhoMus(ArvMusica *r);
 ArvMusica** menorDirMus(ArvMusica **r);
-int removerMus(ArvMusica **r, char *titulo);
+int removerMus(ArvMusica **r, const char *titulo);
 ArvMusica* buscarMusica(ArvMusica *r, const char *nome);
 
 // declarações das funções de álbum
@@ -87,7 +87,7 @@ void imprimeArvArt(ArvArtista *r);
 void liberaArvArt(ArvArtista *r);
 ArvArtista* soUmFilhoArt(ArvArtista *r);
 ArvArtista** menorDirArt(ArvArtista **r);
-int removerArt(ArvArtista **r, char *nome);
+int removerArt(ArvArtista **r, const char *nome);
 ArvArtista* buscarArtista(ArvArtista *r, const char *nome);
 
 // questões de impressão
@@ -119,6 +119,6 @@ void imprimeArvPlaylist(ArvPlaylist *r);
 void liberarArvPlaylist(ArvPlaylist *r);
 ArvPlaylist* soUmFilhoPlay(ArvPlaylist *r);
 ArvPlaylist** menorDirPlaylist(ArvPlaylist **r);
-int removerPlaylist(ArvPlaylist **r, char *titulo);
+int removerPlaylist(ArvPlaylist **r, const char *titulo);
 ArvPlaylist* buscarPlaylist(ArvPlaylist *r, const char *nome);
 ArvMusP* buscaMusicaEmPlaylist(ArvPlaylist *r, const char *nome);

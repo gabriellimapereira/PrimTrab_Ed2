@@ -84,7 +84,7 @@ ArvPlaylist** menorDirPlaylist(ArvPlaylist **r) {
     return atual;
 }
 
-int removerPlaylist(ArvPlaylist **r, char *titulo) {
+int removerPlaylist(ArvPlaylist **r, const char *titulo) {
     int removeu = 1;
 
     if (*r != NULL) {

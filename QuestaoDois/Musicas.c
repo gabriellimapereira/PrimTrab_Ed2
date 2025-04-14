@@ -146,7 +146,7 @@ ArvMusica** menorDirMus(ArvMusica **r) {
     return atual;
 }
 
-int removerMus(ArvMusica **r, char *titulo) {
+int removerMus(ArvMusica **r, const char *titulo) {
     int removeu = 1;
 
     if (*r != NULL) {

@@ -156,7 +156,7 @@ ArvArtista** menorDirArt(ArvArtista **r) {
     return atual;
 }
 
-int removerArt(ArvArtista **r, char *nome) {
+int removerArt(ArvArtista **r, const char *nome) {
     int removeu = 1;
 
     if (*r != NULL) {

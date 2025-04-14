@@ -41,13 +41,26 @@ typedef struct ArvArtista {
     struct ArvArtista *esq, *dir;
 } ArvArtista;
 
+typedef struct InfoMusP {
+    char nome[50];
+    char artista[50];
+    char album[50];
+} InfoMusP;
+
+typedef struct ArvMusP {
+    InfoMusP info;
+    int altura;
+    struct ArvMusP *esq, *dir;
+} ArvMusP;
+
 typedef struct InfoPlaylist {
     char nome[50];
-    struct ArvMusica *musica;
+    struct ArvMusP *musica;
 } InfoPlaylist;
 
 typedef struct ArvPlaylist {
     InfoPlaylist info;
+    int altura;
     struct ArvPlaylist *esq, *dir;
 } ArvPlaylist;
  
@@ -66,7 +79,8 @@ void imprimeArvMus(ArvMusica *r);
 void liberaArvMus(ArvMusica *r);
 ArvMusica* soUmFilhoMus(ArvMusica *r);
 ArvMusica** menorDirMus(ArvMusica **r);
-int removerMus(ArvMusica **r, char *titulo);
+int removerMus(ArvMusica **r, const char *titulo);
+ArvMusica* buscarMusica(ArvMusica *r, const char *nome);
 
 // declarações das funções de álbum
 InfoAlbum lerInfoAlbum();
@@ -98,7 +112,7 @@ void imprimeArvArt(ArvArtista *r);
 void liberaArvArt(ArvArtista *r);
 ArvArtista* soUmFilhoArt(ArvArtista *r);
 ArvArtista** menorDirArt(ArvArtista **r);
-int removerArt(ArvArtista **r, char *nome);
+int removerArt(ArvArtista **r, const char *nome);
 ArvArtista* buscarArtista(ArvArtista *r, const char *nome);
 
 // questões de impressão
@@ -111,4 +125,37 @@ void imprimeAlbumAnoArt(ArvArtista *r, int ano);
 void musicasEspecificas(ArvArtista *r, const char *artista, const char *album);
 void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album);
 
+// funções da árvore de música de playlist
+InfoMusP copiaDadosMusica(ArvArtista *art, ArvAlbum *alb, ArvMusica *mus);
+ArvMusP* alocarNoMusP(InfoMusP info);
+void rotacaoEsqMusP(ArvMusP **r);
+void rotacaoDirMusP(ArvMusP **r);
+int alturaArvMusP(ArvMusP *raiz);
+int fatorBalanceamentoMusP(ArvMusP *r);
+void ajustarAlturaMusP(ArvMusP **r);
+void balanceamentoMusP(ArvMusP **r);
+int insereNoMusP(ArvMusP **r, ArvMusP *novoNo);
+void imprimeArvMusP(ArvMusP *r);
+void liberaArvMusP(ArvMusP *r);
+ArvMusP* soUmFilhoMusP(ArvMusP *r);
+ArvMusP** menorDirMusP(ArvMusP **r);
+int removerMusP(ArvMusP **r, const char *titulo);
+ArvMusP* buscarMusicaP(ArvMusP *r, const char *nome);
+
 // funções de playlist
+InfoPlaylist lerInfoPlaylist();
+ArvPlaylist* alocarNoPlaylist(InfoPlaylist info);
+void rotacaoEsqPlay(ArvPlaylist **r);
+void rotacaoDirPlay(ArvPlaylist **r);
+int alturaArvPlay(ArvPlaylist *raiz);
+int fatorBalanceamentoPlay(ArvPlaylist *r);
+void ajustarAlturaPlay(ArvPlaylist **r);
+void balanceamentoPlay(ArvPlaylist **r);
+int insereNoPlaylist(ArvPlaylist **r, ArvPlaylist *novoNo);
+void imprimeArvPlaylist(ArvPlaylist *r);
+void liberarArvPlaylist(ArvPlaylist *r);
+ArvPlaylist* soUmFilhoPlay(ArvPlaylist *r);
+ArvPlaylist** menorDirPlaylist(ArvPlaylist **r);
+int removerPlaylist(ArvPlaylist **r, char *titulo);
+ArvPlaylist* buscarPlaylist(ArvPlaylist *r, const char *nome);
+ArvMusP* buscaMusicaEmPlaylist(ArvPlaylist *r, const char *nome);

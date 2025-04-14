@@ -3,15 +3,18 @@
 #include <string.h>
 #include "prototipos.h"
 
-void menuPlaylist(ArvPlaylist **r) {
-    int op;
+void menuPlaylist(ArvPlaylist **r, ArvArtista *rArt) {
+    int op, inseriu, removeu;
+    char nome[50];
+    ArvPlaylist *play = NULL; 
     do {
         printf("\n--- MENU DE PLAYLIST ---\n");
         printf("1 - Criar playlist\n");
         printf("2 - Mostrar dados de uma playlist\n");
         printf("3 - Remover música de uma playlist\n");
         printf("4 - Remover playlist\n");
-        printf("5 - Remover música de álbum (se não estiver em nenhuma playlist)\n");
+        printf("5 - Imprimir playlists\n");
+        printf("6 - Inserir música em uma playlist\n");
         printf("0 - Voltar\n");
         printf("Escolha: ");
         scanf("%d", &op);
@@ -19,14 +22,93 @@ void menuPlaylist(ArvPlaylist **r) {
 
         switch (op) {
             case 1:
+                inseriu = insereNoPlaylist(r, alocarNoPlaylist(lerInfoPlaylist()));
+                if (inseriu) 
+                    printf("Nova playlist inserida!\n");
+                else
+                    printf("Há uma playlist de mesmo nome. A inserção não foi feita.\n");
                 break;
             case 2:
+                printf("Digite o nome da playlist: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                play = buscarPlaylist(*r, nome);
+                if (play) {
+                    printf("Músicas: \n");
+                    imprimeArvMusP((*play).info.musica);
+                } else 
+                    printf("Playlist não encontrada!\n");
                 break;
             case 3:
+                char mus[50];
+
+                printf("Digite o nome da playlist: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                play = buscarPlaylist(*r, nome);
+                if (play) {
+                    char musica[50];
+                    printf("Digite o nome da música: \n");
+                    setbuf(stdin, NULL);
+                    scanf("%[^\n]", musica);
+                    removeu = removerMusP(&((*play).info.musica), musica);
+                    if (removeu) 
+                        printf("Música removida da playlist!\n");
+                    else 
+                        printf("Música não encontrada\n");
+                } else 
+                    printf("Playlist não encontrada!\n");
                 break;
             case 4:
+                printf("Digite o nome da playlist: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                removeu = removerPlaylist(r, nome);
+                if (removeu) 
+                    printf("Remoção feita com sucesso!\n");
+                else 
+                    printf("Playlist não encontrada!\n");
                 break;
             case 5:
+                imprimeArvPlaylist(*r);
+                break;
+            case 6:
+                printf("Digite o nome da playlist: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                play = buscarPlaylist(*r, nome);
+                if (play) {
+                    printf("Digite o nome da artista dessa música: ");
+                    setbuf(stdin, NULL);
+                    scanf("%[^\n]", nome);
+                    ArvArtista *art = buscarArtista(rArt, nome);
+                    if (art) {
+                        printf("Digite o nome do álbum ao qual a música pertence: ");
+                        setbuf(stdin, NULL);
+                        scanf("%[^\n]", nome);
+                        ArvAlbum *alb = buscarAlbum((*art).info.album, nome);
+                        if (alb) {
+                            printf("Digite o nome da música: \n");
+                            setbuf(stdin, NULL);
+                            scanf("%[^\n]", nome);
+                            ArvMusica *mus = buscarMusica((*alb).info.musica, nome);
+                            if (mus) {
+                                
+                                int inseriu = insereNoMusP(&((**r).info.musica), alocarNoMusP(copiaDadosMusica(art, alb, mus))); 
+                                if (inseriu) 
+                                    printf("Inserção feita com sucesso!\n");
+                                else 
+                                    printf("Música já presente na playlist!\n");
+                            } else 
+                                printf("Música não encontrada!\n");
+                        } else 
+                            printf("Álbum não encontrado!\n");
+                    } else 
+                        printf("Artista não encontrado!\n");
+                } else
+                    printf("Pĺaylist não encontrada!\n");
+                break;
+            case 7:
                 break;
         }
     } while (op != 0);
@@ -50,11 +132,11 @@ int main() {
     ArvArtista *raizArtista = inicializarArvArt();
     ArvPlaylist *raizPlaylist = NULL;
     char nome[50];
-    ArvArtista *art;
+    ArvArtista *art = NULL;
 
     InfoArtista vetorArtista[4] = {
-        {"1", "7", "5"},
-        {"2", "3", "3"},
+        {"2", "7", "5"},
+        {"1", "3", "3"},
         {"3", "7", "2"},
         {"8", "8", "8"},
     };
@@ -79,14 +161,14 @@ int main() {
         {"130", 5}, {"131", 5}, {"132", 5}, {"133", 5}, {"134", 5}
     };    
     
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
         insereNoArt(&raizArtista, alocarNoArt(vetorArtista[i]));
     }
 
     insereNoAlbum(&((*raizArtista).info.album), alocarNoAlbum(vetorAlbum[0]));
-    insereNoAlbum(&((*raizArtista->esq).info.album), alocarNoAlbum(vetorAlbum[1]));
+    insereNoAlbum(&((*raizArtista->dir).info.album), alocarNoAlbum(vetorAlbum[1]));
 
-    int inseriu = insercao(raizArtista, "5", "10", alocarNoMusica(vetorMusicas[0]));
+    int inseriu = insercao(raizArtista, "2", "10", alocarNoMusica(vetorMusicas[0]));
     inseriu = insercao(raizArtista, "3", "11", alocarNoMusica(vetorMusicas[1]));
     if (inseriu) printf("deu certo!\n");
 
@@ -102,7 +184,8 @@ int main() {
         printf("7 - Imprimir artistas por tipo e estilo\n");
         printf("8 - A proibida...\n");
         printf("9 - Álbuns por ano\n");
-        printf("10 - Playlist\n");
+        printf("10 - Remover determinada música\n");
+        printf("11 - Playlist\n");
         printf("0 - Sair\n");
         printf("Escolha: ");
         scanf("%d", &op);
@@ -193,7 +276,36 @@ int main() {
                 scanf("%d", &ano);
                 imprimeAlbumAnoArt(raizArtista, ano);
             case 10:
-                menuPlaylist(&raizPlaylist);
+                printf("Digite o nome do artista: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                art = buscarArtista(raizArtista, nome);
+                if (art) {
+                    printf("Digite o nome do álbum: \n");
+                    setbuf(stdin, NULL);
+                    scanf("%[^\n]", nome);
+                    ArvAlbum *alb = buscarAlbum((*art).info.album, nome);
+                    if (alb) {
+                        printf("Digite o nome da música: \n");
+                        setbuf(stdin, NULL);
+                        scanf("%[^\n]", nome);
+                        ArvMusP *musicaExiste = buscaMusicaEmPlaylist(raizPlaylist, nome);
+                        if (musicaExiste) {
+                            printf("A música está em uma playlist atualmente. Remova ela dessa playlist pra removê-la daqui.\n");
+                        } else {
+                            int removeu = removerMus(&((*alb).info.musica), nome);
+                            if (removeu) 
+                                printf("Música removida com sucesso!\n");
+                            else 
+                                printf("Música não encontrada!\n");
+                        }
+                    } else 
+                        printf("Álbum não encontrado!\n");
+                } else 
+                    printf("Artista não encontrado!\n");
+                break;
+            case 11:
+                menuPlaylist(&raizPlaylist, raizArtista);
             case 0:
                 printf("Saindo...\n");
                 break;
@@ -207,3 +319,4 @@ int main() {
     liberaArvArt(raizArtista);
     return 0;
 }
+
