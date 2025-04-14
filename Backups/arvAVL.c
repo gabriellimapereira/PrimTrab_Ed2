@@ -80,13 +80,13 @@ void balanceamento(AVL **r) {
 int insere(AVL **raiz, AVL *novoNo) {
     int inseriu = 1;
 
-    if (*raiz == NULL) {
+    if (*raiz == NULL) 
         *raiz = novoNo;
-    } else if ((**raiz).dado <  (*novoNo).dado) {
+    else if ((**raiz).dado <  (*novoNo).dado) 
         inseriu = insere(&((**raiz).dir), novoNo);
-    } else if ((**raiz).dado > (*novoNo).dado) {
+    else if ((**raiz).dado > (*novoNo).dado) 
         inseriu = insere(&((**raiz).esq), novoNo);
-    } else 
+    else 
         inseriu = 0;
     
     if (*raiz && inseriu) {
@@ -157,7 +157,6 @@ int removerNo(AVL **raiz, int dado) {
         }
     } else 
         removeu = 0;
-    
 
     if (*raiz && removeu) {
         balanceamento(raiz);

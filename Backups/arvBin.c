@@ -18,14 +18,14 @@ ArvBin* criarNo(int dado) {
 }
 
 ArvBin* inserirNo(ArvBin *raiz, int dado) {
-    if (raiz == NULL) {
+    if (raiz == NULL) 
         return criarNo(dado);
-    }
-    if (dado < raiz->dado) {
+    
+    if (dado < raiz->dado) 
         raiz->esq = inserirNo(raiz->esq, dado);
-    } else if (dado > raiz->dado) {
+    else if (dado > raiz->dado) 
         raiz->dir = inserirNo(raiz->dir, dado);
-    }
+    
     return raiz;
 }
 
@@ -48,8 +48,7 @@ void liberarArvore(ArvBin *raiz) {
 ArvBin** menorDir(ArvBin **raiz) {
     ArvBin **atual = *raiz;
 
-    if ((*raiz)->esq != NULL)  
-        while ((*atual)->esq != NULL) atual = &((*atual)->esq);
+    if ((*raiz)->esq != NULL) while ((*atual)->esq != NULL) atual = &((*atual)->esq);
 
     return atual;
 }
@@ -88,9 +87,9 @@ int removerNo(ArvBin **raiz, int dado) {
                 removeu = removerNo(&((**raiz).dir), dado);
             }
         }
-    } else {
+    } else 
         removeu = 0;
-    }
+    
     return removeu;
 }
 
@@ -125,9 +124,9 @@ int removerNoAntigo(ArvBin **raiz, int dado) {
                 removeu = removerNoAntigo(&((**raiz).dir), dado);
             }
         }
-    } else {
+    } else 
         removeu = 0;
-    }
+    
 
     return removeu;
 }
