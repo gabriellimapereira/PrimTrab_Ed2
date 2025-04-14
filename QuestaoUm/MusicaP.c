@@ -3,6 +3,15 @@
 #include "stdlib.h"
 #include "prototipos.h"
 
+InfoMusP copiaDadosMusica(ArvArtista *art, ArvAlbum *alb, ArvMusica *mus) {
+    InfoMusP info;
+    strcpy(info.nome, (*mus).info.titulo);
+    strcpy(info.album, (*alb).info.titulo);
+    strcpy(info.artista, (*art).info.nome);
+
+    return info;
+}
+
 ArvMusP* alocarNoMusP(InfoMusP info) {
     ArvMusP *novoNo = (ArvMusP*) malloc(sizeof(ArvMusP));
 
@@ -67,7 +76,7 @@ ArvMusP** menorDirMusP(ArvMusP **r) {
     return atual;
 }
 
-int removerMusP(ArvMusP **r, char *titulo) {
+int removerMusP(ArvMusP **r, const char *titulo) {
     int removeu = 1;
 
     if (*r != NULL) {

@@ -163,7 +163,6 @@ int nomeAlbum(ArvAlbum *r, const char *musica, int *duracao, char *album) {
     return achou;
 }
 
-
 void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album) {
     char *nome = NULL;
 

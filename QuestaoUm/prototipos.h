@@ -101,13 +101,14 @@ void musicasEspecificas(ArvArtista *r, const char *artista, const char *album);
 void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album);
 
 // funções da árvore de música de playlist
+InfoMusP copiaDadosMusica(ArvArtista *art, ArvAlbum *alb, ArvMusica *mus);
 ArvMusP* alocarNoMusP(InfoMusP info);
 int insereNoMusP(ArvMusP **r, ArvMusP *novoNo);
 void imprimeArvMusP(ArvMusP *r);
 void liberaArvMusP(ArvMusP *r);
 ArvMusP* soUmFilhoMusP(ArvMusP *r);
 ArvMusP** menorDirMusP(ArvMusP **r);
-int removerMusP(ArvMusP **r, char *titulo);
+int removerMusP(ArvMusP **r, const char *titulo);
 ArvMusP* buscarMusicaP(ArvMusP *r, const char *nome);
 
 // funções de playlist
@@ -120,3 +121,4 @@ ArvPlaylist* soUmFilhoPlay(ArvPlaylist *r);
 ArvPlaylist** menorDirPlaylist(ArvPlaylist **r);
 int removerPlaylist(ArvPlaylist **r, char *titulo);
 ArvPlaylist* buscarPlaylist(ArvPlaylist *r, const char *nome);
+ArvMusP* buscaMusicaEmPlaylist(ArvPlaylist *r, const char *nome);

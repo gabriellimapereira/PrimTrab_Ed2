@@ -136,3 +136,19 @@ ArvPlaylist* buscarPlaylist(ArvPlaylist *r, const char *nome) {
     }
     return aux;
 }
+
+ArvMusP* buscaMusicaEmPlaylist(ArvPlaylist *r, const char *nome) {
+    ArvMusP *no = NULL;
+
+    if (r) {
+        no  = buscarMusicaP((*r).info.musica, nome);
+        if (no == NULL) {
+            no = buscaMusicaEmPlaylist((*r).esq, nome);
+            if (no == NULL) {
+                no = buscaMusicaEmPlaylist((*r).dir, nome);
+            }
+        }
+    } 
+
+    return no;
+}

@@ -15,7 +15,6 @@ void menuPlaylist(ArvPlaylist **r, ArvArtista *rArt) {
         printf("4 - Remover playlist\n");
         printf("5 - Imprimir playlists\n");
         printf("6 - Inserir música em uma playlist\n");
-        printf("7 - Remover música de uma playlist\n");
         printf("0 - Voltar\n");
         printf("Escolha: ");
         scanf("%d", &op);
@@ -74,6 +73,40 @@ void menuPlaylist(ArvPlaylist **r, ArvArtista *rArt) {
                 imprimeArvPlaylist(*r);
                 break;
             case 6:
+                printf("Digite o nome da playlist: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                play = buscarPlaylist(*r, nome);
+                if (play) {
+                    printf("Digite o nome da artista dessa música: ");
+                    setbuf(stdin, NULL);
+                    scanf("%[^\n]", nome);
+                    ArvArtista *art = buscarArtista(rArt, nome);
+                    if (art) {
+                        printf("Digite o nome do álbum ao qual a música pertence: ");
+                        setbuf(stdin, NULL);
+                        scanf("%[^\n]", nome);
+                        ArvAlbum *alb = buscarAlbum((*art).info.album, nome);
+                        if (alb) {
+                            printf("Digite o nome da música: \n");
+                            setbuf(stdin, NULL);
+                            scanf("%[^\n]", nome);
+                            ArvMusica *mus = buscarMusica((*alb).info.musica, nome);
+                            if (mus) {
+                                
+                                int inseriu = insereNoMusP(&((**r).info.musica), alocarNoMusP(copiaDadosMusica(art, alb, mus))); 
+                                if (inseriu) 
+                                    printf("Inserção feita com sucesso!\n");
+                                else 
+                                    printf("Música já presente na playlist!\n");
+                            } else 
+                                printf("Música não encontrada!\n");
+                        } else 
+                            printf("Álbum não encontrado!\n");
+                    } else 
+                        printf("Artista não encontrado!\n");
+                } else
+                    printf("Pĺaylist não encontrada!\n");
                 break;
             case 7:
                 break;
@@ -243,7 +276,7 @@ int main() {
                 scanf("%d", &ano);
                 imprimeAlbumAnoArt(raizArtista, ano);
             case 10:
-                printf("Digite o nome da playlist: \n");
+                printf("Digite o nome do artista: \n");
                 setbuf(stdin, NULL);
                 scanf("%[^\n]", nome);
                 art = buscarArtista(raizArtista, nome);
@@ -256,11 +289,16 @@ int main() {
                         printf("Digite o nome da música: \n");
                         setbuf(stdin, NULL);
                         scanf("%[^\n]", nome);
-                        int removeu = removerMus(&((*alb).info.musica), nome);
-                        if (removeu) 
-                            printf("Música removida com sucesso!\n");
-                        else 
-                            printf("Música não encontrada!\n");
+                        ArvMusP *musicaExiste = buscaMusicaEmPlaylist(raizPlaylist, nome);
+                        if (musicaExiste) {
+                            printf("A música está em uma playlist atualmente. Remova ela dessa playlist pra removê-la daqui.\n");
+                        } else {
+                            int removeu = removerMus(&((*alb).info.musica), nome);
+                            if (removeu) 
+                                printf("Música removida com sucesso!\n");
+                            else 
+                                printf("Música não encontrada!\n");
+                        }
                     } else 
                         printf("Álbum não encontrado!\n");
                 } else 
