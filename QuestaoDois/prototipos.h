@@ -110,9 +110,6 @@ void balanceamentoArt(ArvArtista **r);
 int insereNoArt(ArvArtista **r, ArvArtista *novoNo);
 void imprimeArvArt(ArvArtista *r);
 void liberaArvArt(ArvArtista *r);
-ArvArtista* soUmFilhoArt(ArvArtista *r);
-ArvArtista** menorDirArt(ArvArtista **r);
-int removerArt(ArvArtista **r, const char *nome);
 ArvArtista* buscarArtista(ArvArtista *r, const char *nome);
 
 // questões de impressão
