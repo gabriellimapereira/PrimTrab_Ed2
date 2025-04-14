@@ -34,6 +34,64 @@ ArvAlbum* alocarNoAlbum(InfoAlbum info) {
     return novoNo;
 }
 
+void rotacaoEsqAlb(ArvAlbum **r) {
+    ArvAlbum *aux = (**r).dir;
+    (**r).dir = (*aux).esq;
+    (*aux).esq = (*r);
+    (*r) = aux;
+}
+
+void rotacaoDirAlb(ArvAlbum **r) {
+    ArvAlbum *aux = (**r).esq;
+    (**r).esq = (*aux).dir;
+    (*aux).dir = (*r);
+    (*r) = aux;
+}
+
+int alturaArvAlb(ArvAlbum *raiz) {
+    int altura;
+
+    if (raiz) {
+        int alturaEsq = -1, alturaDir = -1;
+        if ((*raiz).esq) alturaEsq = (*raiz).esq->altura;
+        if ((*raiz).dir) alturaDir = (*raiz).dir->altura;
+        if (alturaEsq > alturaDir)
+            altura = alturaEsq + 1;
+        else 
+            altura = alturaDir + 1;
+    } else 
+        altura = -1;
+
+    return altura;
+}
+
+int fatorBalanceamentoAlb(ArvAlbum *r) { //esq - dir
+    return alturaArvAlb((*r).esq) - alturaArvAlb((*r).dir);
+}
+
+void ajustarAlturaAlb(ArvAlbum **r) {
+    if (*r) {
+        ajustarAlturaAlb(&((**r).esq));
+        ajustarAlturaAlb(&((**r).dir));
+        (**r).altura = alturaArvAlb(*r);
+    }
+}
+
+void balanceamentoAlb(ArvAlbum **r) {
+    int fb;
+
+    fb = fatorBalanceamentoAlb(*r);
+    if (fb > 1) {
+        int fbEsq = fatorBalanceamentoAlb((**r).esq);
+        if (fbEsq < 0) rotacaoEsqAlb(&((**r).esq));
+        rotacaoDirAlb(r);
+    } else if (fb < -1) {
+        int fbDir = fatorBalanceamentoAlb((**r).dir);
+        if (fbDir > 0) rotacaoDirAlb(&((**r).dir));
+        rotacaoEsqAlb(r);
+    }
+}
+
 int insereNoAlbum(ArvAlbum **r, ArvAlbum *novoNo) {
     int inseriu = 1;
 
@@ -45,6 +103,11 @@ int insereNoAlbum(ArvAlbum **r, ArvAlbum *novoNo) {
         inseriu = insereNoAlbum(&((**r).esq), novoNo);
     else 
         inseriu = 0;
+
+    if (*r && inseriu) {
+        balanceamentoAlb(r);
+        ajustarAlturaAlb(r);
+    }
     
     return inseriu;
 }

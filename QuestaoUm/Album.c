@@ -18,10 +18,6 @@ InfoAlbum lerInfoAlbum() {
     return info;
 }
 
-ArvAlbum* inicializarArvAlbum() {
-    return NULL;
-}
-
 ArvAlbum* alocarNoAlbum(InfoAlbum info) {
     ArvAlbum *novoNo = (ArvAlbum*) malloc(sizeof(ArvAlbum));
 

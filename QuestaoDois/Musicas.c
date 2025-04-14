@@ -31,6 +31,64 @@ ArvMusica* alocarNoMusica(InfoMusica info) {
     return novoNo;
 }
 
+void rotacaoEsqMus(ArvMusica **r) {
+    ArvMusica *aux = (**r).dir;
+    (**r).dir = (*aux).esq;
+    (*aux).esq = (*r);
+    (*r) = aux;
+}
+
+void rotacaoDirMus(ArvMusica **r) {
+    ArvMusica *aux = (**r).esq;
+    (**r).esq = (*aux).dir;
+    (*aux).dir = (*r);
+    (*r) = aux;
+}
+
+int alturaArvMus(ArvMusica *raiz) {
+    int altura;
+
+    if (raiz) {
+        int alturaEsq = -1, alturaDir = -1;
+        if ((*raiz).esq) alturaEsq = (*raiz).esq->altura;
+        if ((*raiz).dir) alturaDir = (*raiz).dir->altura;
+        if (alturaEsq > alturaDir)
+            altura = alturaEsq + 1;
+        else 
+            altura = alturaDir + 1;
+    } else 
+        altura = -1;
+
+    return altura;
+}
+
+int fatorBalanceamentoMus(ArvMusica *r) { //esq - dir
+    return alturaArvMus((*r).esq) - alturaArvMus((*r).dir);
+}
+
+void ajustarAlturaMus(ArvMusica **r) {
+    if (*r) {
+        ajustarAlturaMus(&((**r).esq));
+        ajustarAlturaMus(&((**r).dir));
+        (**r).altura = alturaArvMus(*r);
+    }
+}
+
+void balanceamentoMus(ArvMusica **r) {
+    int fb;
+
+    fb = fatorBalanceamentoMus(*r);
+    if (fb > 1) {
+        int fbEsq = fatorBalanceamentoMus((**r).esq);
+        if (fbEsq < 0) rotacaoEsqMus(&((**r).esq));
+        rotacaoDirMus(r);
+    } else if (fb < -1) {
+        int fbDir = fatorBalanceamentoMus((**r).dir);
+        if (fbDir > 0) rotacaoDirMus(&((**r).dir));
+        rotacaoEsqMus(r);
+    }
+}
+
 int insereNoMus(ArvMusica **r, ArvMusica *novoNo) {
     int inseriu = 1;
 
@@ -42,6 +100,11 @@ int insereNoMus(ArvMusica **r, ArvMusica *novoNo) {
         inseriu = insereNoMus(&((**r).esq), novoNo);
     else 
         inseriu = 0;
+
+    if (*r && inseriu) {
+        balanceamentoMus(r);
+        ajustarAlturaMus(r);
+    }
 
     return inseriu;
 }
@@ -117,6 +180,11 @@ int removerMus(ArvMusica **r, char *titulo) {
         }
     } else 
         removeu = 0;
+
+    if (*r && removeu) {
+        balanceamentoMus(r);
+        ajustarAlturaMus(r);
+    }
     
     return removeu;
 }

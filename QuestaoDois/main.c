@@ -53,9 +53,9 @@ int main() {
     ArvArtista *art;
 
     InfoArtista vetorArtista[4] = {
-        {"5", "7", "5"},
-        {"3", "3", "3"},
-        {"2", "7", "2"},
+        {"1", "7", "5"},
+        {"2", "3", "3"},
+        {"3", "7", "2"},
         {"8", "8", "8"},
     };
     
@@ -79,7 +79,7 @@ int main() {
         {"130", 5}, {"131", 5}, {"132", 5}, {"133", 5}, {"134", 5}
     };    
     
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
         insereNoArt(&raizArtista, alocarNoArt(vetorArtista[i]));
     }
 
@@ -123,9 +123,10 @@ int main() {
                 art = buscarArtista(raizArtista, nome);
                 if (art) {
                     int inseriu = insereNoAlbum(&((*art).info.album), alocarNoAlbum(lerInfoAlbum()));
-                    if (inseriu) 
+                    if (inseriu) {
                         printf("Álbum cadastrado!\n");
-                    else 
+                        (*art).info.quantAlbum++;
+                    } else 
                         printf("Álbum já está na árvore. A inserção não foi feita.\n");
                 } else 
                     printf("Artista não encontrado!\n");
@@ -142,9 +143,10 @@ int main() {
                     ArvAlbum *alb = buscarAlbum((*art).info.album, nome);
                     if (alb) {
                         int inseriu = insereNoMus(&((*alb).info.musica), alocarNoMusica(lerInfoMusica()));
-                        if (inseriu) 
+                        if (inseriu) {
                             printf("Música cadastrada!\n");
-                        else 
+                            (*alb).info.quantMus++;
+                        } else 
                             printf("Música já está na árvore. A inserção não foi feita.\n");
                     } else 
                     printf("Álbum não encontrado!\n");
@@ -205,4 +207,3 @@ int main() {
     liberaArvArt(raizArtista);
     return 0;
 }
-

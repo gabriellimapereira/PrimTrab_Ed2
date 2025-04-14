@@ -15,10 +15,6 @@ InfoMusica lerInfoMusica() {
     return info;
 }
 
-ArvMusica* inicializarArvMus() {
-    return NULL;
-}
-
 ArvMusica* alocarNoMusica(InfoMusica info) {
     ArvMusica *novoNo = (ArvMusica*) malloc(sizeof(ArvMusica));
 
@@ -167,6 +163,7 @@ int nomeAlbum(ArvAlbum *r, const char *musica, int *duracao, char *album) {
     return achou;
 }
 
+
 void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album) {
     char *nome = NULL;
 
@@ -180,4 +177,3 @@ void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album) {
         }
     }
 }
-

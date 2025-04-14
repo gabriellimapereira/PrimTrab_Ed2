@@ -38,9 +38,20 @@ typedef struct ArvArtista {
     struct ArvArtista *esq, *dir;
 } ArvArtista;
 
+typedef struct InfoMusP {
+    char nome[50];
+    char artista[50];
+    char album[50];
+} InfoMusP;
+
+typedef struct ArvMusP {
+    InfoMusP info;
+    struct ArvMusP *esq, *dir;
+} ArvMusP;
+
 typedef struct InfoPlaylist {
     char nome[50];
-    struct ArvMusica *musica;
+    struct ArvMusP *musica;
 } InfoPlaylist;
 
 typedef struct ArvPlaylist {
@@ -50,7 +61,6 @@ typedef struct ArvPlaylist {
  
 // declarações das funções de música
 InfoMusica lerInfoMusica();
-ArvMusica* inicializarArvMus();
 ArvMusica* alocarNoMusica(InfoMusica info);
 int insereNoMus(ArvMusica **r, ArvMusica *novoNo);
 void imprimeArvMus(ArvMusica *r);
@@ -58,10 +68,10 @@ void liberaArvMus(ArvMusica *r);
 ArvMusica* soUmFilhoMus(ArvMusica *r);
 ArvMusica** menorDirMus(ArvMusica **r);
 int removerMus(ArvMusica **r, char *titulo);
+ArvMusica* buscarMusica(ArvMusica *r, const char *nome);
 
 // declarações das funções de álbum
 InfoAlbum lerInfoAlbum();
-ArvAlbum* inicializarArvAlbum();
 ArvAlbum* alocarNoAlbum(InfoAlbum info);
 int insereNoAlbum(ArvAlbum **r, ArvAlbum *novoNo);
 void imprimeArvAlbum(ArvAlbum *r);
@@ -90,4 +100,23 @@ void imprimeAlbumAnoArt(ArvArtista *r, int ano);
 void musicasEspecificas(ArvArtista *r, const char *artista, const char *album);
 void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album);
 
+// funções da árvore de música de playlist
+ArvMusP* alocarNoMusP(InfoMusP info);
+int insereNoMusP(ArvMusP **r, ArvMusP *novoNo);
+void imprimeArvMusP(ArvMusP *r);
+void liberaArvMusP(ArvMusP *r);
+ArvMusP* soUmFilhoMusP(ArvMusP *r);
+ArvMusP** menorDirMusP(ArvMusP **r);
+int removerMusP(ArvMusP **r, char *titulo);
+ArvMusP* buscarMusicaP(ArvMusP *r, const char *nome);
+
 // funções de playlist
+InfoPlaylist lerInfoPlaylist();
+ArvPlaylist* alocarNoPlaylist(InfoPlaylist info);
+int insereNoPlaylist(ArvPlaylist **r, ArvPlaylist *novoNo);
+void imprimeArvPlaylist(ArvPlaylist *r);
+void liberarArvPlaylist(ArvPlaylist *r);
+ArvPlaylist* soUmFilhoPlay(ArvPlaylist *r);
+ArvPlaylist** menorDirPlaylist(ArvPlaylist **r);
+int removerPlaylist(ArvPlaylist **r, char *titulo);
+ArvPlaylist* buscarPlaylist(ArvPlaylist *r, const char *nome);

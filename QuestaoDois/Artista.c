@@ -38,6 +38,64 @@ ArvArtista* alocarNoArt(InfoArtista info) {
     return novoNo;
 }
 
+void rotacaoEsqArt(ArvArtista **r) {
+    ArvArtista *aux = (**r).dir;
+    (**r).dir = (*aux).esq;
+    (*aux).esq = (*r);
+    (*r) = aux;
+}
+
+void rotacaoDirArt(ArvArtista **r) {
+    ArvArtista *aux = (**r).esq;
+    (**r).esq = (*aux).dir;
+    (*aux).dir = (*r);
+    (*r) = aux;
+}
+
+int alturaArvArt(ArvArtista *raiz) {
+    int altura;
+
+    if (raiz) {
+        int alturaEsq = -1, alturaDir = -1;
+        if ((*raiz).esq) alturaEsq = (*raiz).esq->altura;
+        if ((*raiz).dir) alturaDir = (*raiz).dir->altura;
+        if (alturaEsq > alturaDir)
+            altura = alturaEsq + 1;
+        else 
+            altura = alturaDir + 1;
+    } else 
+        altura = -1;
+
+    return altura;
+}
+
+int fatorBalanceamentoArt(ArvArtista *r) { //esq - dir
+    return alturaArvArt((*r).esq) - alturaArvArt((*r).dir);
+}
+
+void ajustarAlturaArt(ArvArtista **r) {
+    if (*r) {
+        ajustarAlturaArt(&((**r).esq));
+        ajustarAlturaArt(&((**r).dir));
+        (**r).altura = alturaArvArt(*r);
+    }
+}
+
+void balanceamentoArt(ArvArtista **r) {
+    int fb;
+
+    fb = fatorBalanceamentoArt(*r);
+    if (fb > 1) {
+        int fbEsq = fatorBalanceamentoArt((**r).esq);
+        if (fbEsq < 0) rotacaoEsqArt(&((**r).esq));
+        rotacaoDirArt(r);
+    } else if (fb < -1) {
+        int fbDir = fatorBalanceamentoArt((**r).dir);
+        if (fbDir > 0) rotacaoDirArt(&((**r).dir));
+        rotacaoEsqArt(r);
+    }
+}
+
 int insereNoArt(ArvArtista **r, ArvArtista *novoNo) {
     int inseriu = 1;
 
@@ -49,6 +107,11 @@ int insereNoArt(ArvArtista **r, ArvArtista *novoNo) {
         inseriu = insereNoArt(&((**r).esq), novoNo);
     else 
         inseriu = 0;
+    
+    if (*r && inseriu) {
+        balanceamentoArt(r);
+        ajustarAlturaArt(r);
+    }
     
     return inseriu;
 }
@@ -127,9 +190,14 @@ int removerArt(ArvArtista **r, char *nome) {
                 removeu = removerArt(&((**r).dir), nome);
             }
         }
-    } else {
+    } else 
         removeu = 0;
+
+    if (*r && removeu) {
+        balanceamentoArt(r);
+        ajustarAlturaArt(r);
     }
+    
     return removeu;
 }
 

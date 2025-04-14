@@ -3,24 +3,8 @@
 #include "stdlib.h"
 #include "prototipos.h"
 
-InfoPlaylist lerInfoPlaylist() {
-    InfoPlaylist info;
-
-    printf("Digite o nome da playlist: ");
-    setbuf(stdin, NULL);
-    scanf("%[^\n]", info.nome);
-
-    info.musica = NULL;
-
-    return info;
-}
-
-ArvPlaylist* inicializarArvPlaylist() {
-    return NULL;
-}
-
-ArvPlaylist* alocarNoPlaylist(InfoPlaylist info) {
-    ArvPlaylist *novoNo = (ArvPlaylist*) malloc(sizeof(ArvPlaylist));
+ArvMusP* alocarNoMusP(InfoMusP info) {
+    ArvMusP *novoNo = (ArvMusP*) malloc(sizeof(ArvMusP));
 
     if (novoNo != NULL) {
         (*novoNo).info = info;
@@ -31,40 +15,39 @@ ArvPlaylist* alocarNoPlaylist(InfoPlaylist info) {
     return novoNo;
 }
 
-int insereNoPlaylist(ArvPlaylist **r, ArvPlaylist *novoNo) {
+int insereNoMusP(ArvMusP **r, ArvMusP *novoNo) {
     int inseriu = 1;
 
     if (*r == NULL) 
         *r = novoNo;
     else if (strcmp((**r).info.nome, (*novoNo).info.nome) < 0) 
-        inseriu = insereNoPlaylist(&((**r).dir), novoNo);
+        inseriu = insereNoMusP(&((**r).dir), novoNo);
     else if (strcmp((**r).info.nome, (*novoNo).info.nome) > 0) 
-        inseriu = insereNoPlaylist(&((**r).esq), novoNo);
+        inseriu = insereNoMusP(&((**r).esq), novoNo);
     else 
         inseriu = 0;
 
     return inseriu;
 }
 
-void imprimeArvPlaylist(ArvPlaylist *r) {
+void imprimeArvMusP(ArvMusP *r) {
     if (r != NULL) {
-        imprimeArvPlaylist((*r).esq);
-        printf("Título da playlist: %s\nMúsicas: \n", (*r).info.nome);
-        imprimeArvMusP((*r).info.musica);
-        imprimeArvPlaylist((*r).dir);
+        imprimeArvMusP((*r).esq);
+        printf("Título da música: %s Artista: %s Álbum: %s\n", (*r).info.nome, (*r).info.artista, (*r).info.nome);
+        imprimeArvMusP((*r).dir);
     }
 }
 
-void liberarArvPlaylist(ArvPlaylist *r) {
+void liberaArvMusP(ArvMusP *r) {
     if (r != NULL) {
-        liberarArvPlaylist((*r).esq);
-        liberarArvPlaylist((*r).dir);
+        liberaArvMusP((*r).esq);
+        liberaArvMusP((*r).dir);
         free(r);
     }
 }
 
-ArvPlaylist* soUmFilhoPlay(ArvPlaylist *r) {
-    ArvPlaylist *filho;
+ArvMusP* soUmFilhoMusP(ArvMusP *r) {
+    ArvMusP *filho;
 
     if ((*r).dir == NULL) {
         filho = (*r).esq;
@@ -76,34 +59,33 @@ ArvPlaylist* soUmFilhoPlay(ArvPlaylist *r) {
     return filho;
 }
 
-ArvPlaylist** menorDirPlaylist(ArvPlaylist **r) {
-    ArvPlaylist **atual = r;
+ArvMusP** menorDirMusP(ArvMusP **r) {
+    ArvMusP **atual = r;
 
     if ((**r).esq != NULL) while ((**atual).esq != NULL) atual = &((**atual).esq);
 
     return atual;
 }
 
-int removerPlaylist(ArvPlaylist **r, char *titulo) {
+int removerMusP(ArvMusP **r, char *titulo) {
     int removeu = 1;
 
     if (*r != NULL) {
         if (strcmp((**r).info.nome, titulo) == 0) {
-            liberaArvMusP((**r).info.musica);
-            ArvPlaylist *aux, *filho;
+            ArvMusP *aux, *filho;
             if ((**r).dir == NULL && (**r).esq == NULL) {
                 aux = *r;
                 *r = NULL;
                 free(aux);
             } else {
-                if ((filho = soUmFilhoPlay(*r)) != NULL) {
+                if ((filho = soUmFilhoMusP(*r)) != NULL) {
                     aux = *r;
                     *r = filho;
                     free(aux);
                 } else {
-                    ArvPlaylist **menor;
+                    ArvMusP **menor;
 
-                    menor = menorDirPlaylist(&((**r).dir)); 
+                    menor = menorDirMusP(&((**r).dir)); 
 
                     (**r).info = (**menor).info;
                     aux = (*menor);
@@ -113,9 +95,9 @@ int removerPlaylist(ArvPlaylist **r, char *titulo) {
             } 
         } else {
             if (strcmp((**r).info.nome, titulo) > 0) 
-                removeu = removerPlaylist(&((**r).esq), titulo);
+                removeu = removerMusP(&((**r).esq), titulo);
              else 
-                removeu = removerPlaylist(&((**r).dir), titulo);
+                removeu = removerMusP(&((**r).dir), titulo);
         }
     } else 
         removeu = 0;
@@ -123,16 +105,16 @@ int removerPlaylist(ArvPlaylist **r, char *titulo) {
     return removeu;
 }
 
-ArvPlaylist* buscarPlaylist(ArvPlaylist *r, const char *nome) {
-    ArvPlaylist *aux = NULL;
+ArvMusP* buscarMusicaP(ArvMusP *r, const char *nome) {
+    ArvMusP *aux = NULL;
     if (r != NULL) {
         int cmp = strcmp(nome, (*r).info.nome);
         if (cmp == 0)
             aux = r;
         else if (cmp < 0)
-            aux = buscarPlaylist((*r).esq, nome);
+            aux = buscarMusicaP((*r).esq, nome);
         else
-            aux = buscarPlaylist((*r).dir, nome);
+            aux = buscarMusicaP((*r).dir, nome);
     }
     return aux;
 }
