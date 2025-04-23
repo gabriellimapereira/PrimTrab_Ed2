@@ -133,6 +133,8 @@ int main() {
     ArvPlaylist *raizPlaylist = NULL;
     char nome[50];
     ArvArtista *art = NULL;
+    ArvAlbum *alb = NULL;
+    int ano;
 
     InfoArtista vetorArtista[4] = {
         {"2", "7", "5"},
@@ -172,34 +174,38 @@ int main() {
     inseriu = insercao(raizArtista, "3", "11", alocarNoMusica(vetorMusicas[1]));
     if (inseriu) printf("deu certo!\n");
 
-    int op;
-    do {
-        printf("\n------ MENU ------\n");
-        printf("1 - Inserir artista\n");
-        printf("2 - Inserir álbum para artista\n");
-        printf("3 - Inserir música em álbum\n");
-        printf("4 - Imprimir árvore de artistas\n");
-        printf("5 - Imprimir artistas por tipo\n");
-        printf("6 - Imprimir artistas por estilo\n");
-        printf("7 - Imprimir artistas por tipo e estilo\n");
-        printf("8 - A proibida...\n");
-        printf("9 - Álbuns por ano\n");
-        printf("10 - Remover determinada música\n");
-        printf("11 - Playlist\n");
-        printf("0 - Sair\n");
-        printf("Escolha: ");
-        scanf("%d", &op);
-        getchar();
+    int opcao;
 
-        switch (op) {
-            case 1: 
+    do {
+        printf("\n========= MENU =========\n");
+        printf("1. Cadastrar Artista\n");
+        printf("2. Cadastrar Álbum\n");
+        printf("3. Cadastrar Música\n");
+        printf("4. Mostrar todos os artistas cadastrados\n");
+        printf("5. Mostrar artistas por tipo\n");
+        printf("6. Mostrar artistas por estilo musical\n");
+        printf("7. Mostrar artistas por estilo musical e tipo\n");
+        printf("8. Mostrar álbuns de um artista\n");
+        printf("9. Mostrar álbuns de um ano de um artista\n");
+        printf("10. Mostrar músicas de um álbum de um artista\n");
+        printf("11. Mostrar álbuns de um ano de todos os artistas\n");
+        printf("12. Mostrar dados de uma música\n");
+        printf("13. Remover música de um álbum de um artista\n");
+        printf("14. Menu de Playlist\n");
+        printf("0. Sair\n");
+        printf("========================\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
                 int inseriu = insereNoArt(&raizArtista, alocarNoArt(lerInfoArt()));
                 if (inseriu) 
                     printf("Artista cadastrado!\n");
                 else 
-                    printf("Artista já está na árvore. A inserção não foi feita.\n");
+                    printf("Artista já está na árvore. A inserção não foi feita!\n");
                 break;
-            case 2: 
+            case 2:
                 printf("Digite o nome do artista: ");
                 setbuf(stdin, NULL);
                 scanf("%[^\n]", nome);
@@ -210,20 +216,20 @@ int main() {
                         printf("Álbum cadastrado!\n");
                         (*art).info.quantAlbum++;
                     } else 
-                        printf("Álbum já está na árvore. A inserção não foi feita.\n");
+                        printf("Álbum já está na árvore. A inserção não foi feita!\n");
                 } else 
                     printf("Artista não encontrado!\n");
                 break;
-            case 3: 
+            case 3:
                 printf("Digite o nome do artista: ");
                 setbuf(stdin, NULL);
                 scanf("%[^\n]", nome);
-                ArvArtista *art = buscarArtista(raizArtista, nome);
+                art = buscarArtista(raizArtista, nome);
                 if (art) {
                     printf("Digite o nome do álbum: ");
                     setbuf(stdin, NULL);
                     scanf("%[^\n]", nome);
-                    ArvAlbum *alb = buscarAlbum((*art).info.album, nome);
+                    alb = buscarAlbum((*art).info.album, nome);
                     if (alb) {
                         int inseriu = insereNoMus(&((*alb).info.musica), alocarNoMusica(lerInfoMusica()));
                         if (inseriu) {
@@ -262,20 +268,53 @@ int main() {
                 artistaPorTipoEstilo(raizArtista, tipo, estilo);
                 break;
             case 8:
-                printf("Digite o nome da música: \n");
+                printf("Digite o nome do artista: \n");
                 setbuf(stdin, NULL);
                 scanf("%[^\n]", nome);
-                int duracao;
-                char album[100];
-
-                dadosMusica(raizArtista, nome, &duracao, album);
+                albunsArtista(raizArtista, nome);
                 break;
             case 9:
-                int ano;
-                printf("Digite o ano dos álbuns: \n");
-                scanf("%d", &ano);
-                imprimeAlbumAnoArt(raizArtista, ano);
+                printf("Digite o nome do artista: ");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                art = buscarArtista(raizArtista, nome);
+                if (art) {
+                    printf("Digite o ano: \n");
+                    scanf("%d", &ano);
+                    imprimeAlbumAno((*raizArtista).info.album, ano);
+                } else 
+                    printf("Artista não encontrado!\n");
+                break;
             case 10:
+                printf("Digite o nome do artista: ");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                art = buscarArtista(raizArtista, nome);
+                if (art) {
+                    printf("Digite o nome do álbum: ");
+                    setbuf(stdin, NULL);
+                    scanf("%[^\n]", nome);
+                    alb = buscarAlbum((*art).info.album, nome);
+                    if (alb) {
+                        imprimeArvMus((*alb).info.musica);
+                    } else 
+                    printf("Álbum não encontrado!\n");
+                } else 
+                    printf("Artista não encontrado!\n");
+                break;
+            case 11:
+                if (raizArtista) {
+                    printf("Digite o ano: \n");
+                    scanf("%d", &ano);
+                    imprimeAlbumAno((*raizArtista).info.album, ano);
+                } else {
+                    printf("Não há nenhum artista cadastrado!\n");
+                }
+                break;
+            case 12:
+                printf("Você escolheu: Mostrar dados de uma música\n");
+                break;
+            case 13:
                 printf("Digite o nome do artista: \n");
                 setbuf(stdin, NULL);
                 scanf("%[^\n]", nome);
@@ -304,19 +343,18 @@ int main() {
                 } else 
                     printf("Artista não encontrado!\n");
                 break;
-            case 11:
+            case 14:
                 menuPlaylist(&raizPlaylist, raizArtista);
+                break;
             case 0:
                 printf("Saindo...\n");
                 break;
-
             default:
-                printf("Opção inválida.\n");
+                printf("Opção inválida. Tente novamente.\n");
         }
 
-    } while (op != 0);
+    } while (opcao != 0);
 
     liberaArvArt(raizArtista);
     return 0;
 }
-

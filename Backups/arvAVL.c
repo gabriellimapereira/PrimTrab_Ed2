@@ -44,13 +44,13 @@ int alturaArv(AVL *raiz) {
             altura = alturaEsq + 1;
         else 
             altura = alturaDir + 1;
-    } else 
+    } else //raiz == NULL
         altura = -1;
 
     return altura;
 }
 
-int fatorBalanceamento(AVL *r) { //esq - dir
+int fatorBalanceamento(AVL *r) { //1 - (-1)
     return alturaArv((*r).esq) - alturaArv((*r).dir);
 }
 
@@ -116,7 +116,11 @@ void liberarArvore(AVL *raiz) {
 AVL** menorDir(AVL **raiz) {
     AVL **atual = raiz;
 
-    if ((*raiz)->esq != NULL) while ((*atual)->esq != NULL) atual = &((*atual)->esq);
+    if ((*raiz)->esq != NULL) {
+        while ((*atual)->esq != NULL) {
+            atual = &((*atual)->esq);
+        }
+    }
     
     return atual;
 }
