@@ -312,7 +312,13 @@ int main() {
                 }
                 break;
             case 12:
-                printf("Você escolheu: Mostrar dados de uma música\n");
+                printf("Digite o nome da música: \n");
+                setbuf(stdin, NULL);
+                scanf("%[^\n]", nome);
+                int duracao;
+                char album[100];
+
+                dadosMusica(raizArtista, nome, &duracao, album);
                 break;
             case 13:
                 printf("Digite o nome do artista: \n");

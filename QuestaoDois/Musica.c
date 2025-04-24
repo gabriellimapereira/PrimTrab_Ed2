@@ -248,4 +248,3 @@ void dadosMusica(ArvArtista *r, const char *musica, int *duracao, char *album) {
         }
     }
 }
-
