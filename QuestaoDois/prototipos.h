@@ -1,7 +1,5 @@
 #pragma once
 
-//alternativas que faltam da questao um: xi até xvii
-
 // definições das estruturas das informações e das árvores
 typedef struct InfoMusica {
     char titulo[50];

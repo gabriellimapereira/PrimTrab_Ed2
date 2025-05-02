@@ -115,19 +115,6 @@ void menuPlaylist(ArvPlaylist **r, ArvArtista *rArt) {
     return;
 }
 
-int insercao(ArvArtista *artistas, const char *artista, const char *album, ArvMusica *noMusica) {
-    int inseriu = 0;
-    if (artistas) {
-        ArvArtista *noArtista = buscarArtista(artistas, artista);
-        if (noArtista) {
-            ArvAlbum *noAlbum = buscarAlbum(noArtista->info.album, album);
-            if (noAlbum) 
-                inseriu = insereNoMus(&(noAlbum->info.musica), noMusica);
-        } 
-    } 
-    return inseriu;
-}
-
 int main() {
     ArvArtista *raizArtista = inicializarArvArt();
     ArvPlaylist *raizPlaylist = NULL;
@@ -135,44 +122,6 @@ int main() {
     ArvArtista *art = NULL;
     ArvAlbum *alb = NULL;
     int ano;
-
-    InfoArtista vetorArtista[4] = {
-        {"2", "7", "5"},
-        {"1", "3", "3"},
-        {"3", "7", "2"},
-        {"8", "8", "8"},
-    };
-    
-    InfoAlbum vetorAlbum[7] = {
-        {"10", 2000, 0},
-        {"11", 2001, 0},
-        {"12", 2000, 0},
-        {"15", 2000, 0},
-        {"14", 2000, 0},
-        {"16", 2000, 0},
-        {"17", 2000, 0}
-    };
-
-    InfoMusica vetorMusicas[35] = {
-        {"100", 5}, {"101", 5}, {"102", 5}, {"103", 5}, {"104", 5},
-        {"105", 5}, {"106", 5}, {"107", 5}, {"108", 5}, {"109", 5},
-        {"110", 5}, {"111", 5}, {"112", 5}, {"113", 5}, {"114", 5},
-        {"115", 5}, {"116", 5}, {"117", 5}, {"118", 5}, {"119", 5},
-        {"120", 5}, {"121", 5}, {"122", 5}, {"123", 5}, {"124", 5},
-        {"125", 5}, {"126", 5}, {"127", 5}, {"128", 5}, {"129", 5},
-        {"130", 5}, {"131", 5}, {"132", 5}, {"133", 5}, {"134", 5}
-    };    
-    
-    for (int i = 0; i < 3; i++) {
-        insereNoArt(&raizArtista, alocarNoArt(vetorArtista[i]));
-    }
-
-    insereNoAlbum(&((*raizArtista).info.album), alocarNoAlbum(vetorAlbum[0]));
-    insereNoAlbum(&((*raizArtista->dir).info.album), alocarNoAlbum(vetorAlbum[1]));
-
-    int inseriu = insercao(raizArtista, "2", "10", alocarNoMusica(vetorMusicas[0]));
-    inseriu = insercao(raizArtista, "3", "11", alocarNoMusica(vetorMusicas[1]));
-    if (inseriu) printf("deu certo!\n");
 
     int opcao;
 
